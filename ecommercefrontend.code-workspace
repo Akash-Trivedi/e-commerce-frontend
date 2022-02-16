@@ -6,9 +6,10 @@
     ],
     "settings": {
         "editor.fontSize": 16,
-        "workbench.colorTheme": "Visual Studio Dark",
+        "workbench.colorTheme": "Default High Contrast",
         "editor.minimap.enabled": false,
         "editor.tabSize": 4,
-        "workbench.editor.showTabs": true
+        "workbench.editor.showTabs": true,
+        "workbench.editor.languageDetection": true,
     }
 }

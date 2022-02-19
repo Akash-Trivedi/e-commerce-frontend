@@ -2,7 +2,7 @@
  * author: akash trivedi
  * date created: 15-feb-2022
  * usage: render the top navigation bar for each page.
- * caller function: 
+ * caller function: ecommerce-frontend/src/App.js
  */
 
 import React from 'react';
@@ -15,7 +15,7 @@ export default function Header(props) {
         <header className="text-gray-200 body-font">
             <nav className="navbar navbar-expand-lg navbar-light bg-dark">
                 <div className="container-fluid">
-                    <a className="navbar-brand" href="#">Navbar</a>
+                    <a className="navbar-brand" href="http://127.0.0.1:8000/home">Navbar</a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
@@ -24,11 +24,11 @@ export default function Header(props) {
                             <li className="nav-item">
                                 <a className="nav-link active" aria-current="page" href="#">Home</a>
                             </li>
-                            <li>
+                            {/* <li>
                                 <span className="material-icons-outlined">
                                     shopping_cart
                                 </span>
-                            </li>
+                            </li> */}
                             <li>
                                 <form className="d-flex container-fluid">
                                     <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
@@ -36,14 +36,7 @@ export default function Header(props) {
                                 </form>
                             </li>
                             <li>
-                                here goes the cart icon
-                            </li>
-                            <li>
-                                <a className="nav-link active" aria-current="page" href="#">Home</a>
-
-                                {
-                                    // loggedIn === true ? {'signup/login'} : {'show the profile icon'}
-                                }
+                                <a href="/register">Register</a>
                             </li>
                         </ul>
                     </div>

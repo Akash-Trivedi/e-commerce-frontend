@@ -5,8 +5,8 @@
         }
     ],
     "settings": {
-        "editor.fontSize": 16,
-        "workbench.colorTheme": "Default High Contrast",
+        "editor.fontSize": 12,
+        "workbench.colorTheme": "Visual Studio Dark",
         "editor.minimap.enabled": false,
         "editor.tabSize": 4,
         "workbench.editor.showTabs": true,

@@ -1,0 +1,34 @@
+{
+    "multi line comments": {
+        "prefix": "cc",
+        "body": [
+            "/**",
+            " * ${0}",
+            " */"
+        ],
+        "description": "documentation"
+    },
+    "document description": {
+        "prefix": "dd",
+        "body": [
+            "/**",
+            " * author: akash trivedi",
+            " * date-created: ${0}",
+            " * functionality: ",
+            " */"
+        ],
+        "description": "document description"
+    },
+    "function": {
+        "prefix": "ff",
+        "body": [
+            "function ${0}(){",
+            "    /**",
+            "     * ",
+            "     */",
+            "    return ;",
+            "}"
+        ],
+        "description": "document description"
+    }
+}

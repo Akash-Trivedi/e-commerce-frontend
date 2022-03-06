@@ -6,9 +6,11 @@
  */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 
-export default function Header(props) {
+// this component is the header of the webpage, which is also the navigation bar for the page
+function Header(props) {
     let loggedIn = true;
     // check if the user has logged in and then do the conditional rendering
     return (
@@ -36,7 +38,7 @@ export default function Header(props) {
                                 </form>
                             </li>
                             <li>
-                                <a href="/register">Register</a>
+                                <Link to='publisher/registration'>Register</Link>
                             </li>
                         </ul>
                     </div>
@@ -46,3 +48,5 @@ export default function Header(props) {
         </header>
     )
 }
+
+export default Header;

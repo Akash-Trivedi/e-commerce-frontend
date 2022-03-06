@@ -18,7 +18,7 @@ ReactDOM.render(
       <Route path='product' element={<Product tag={tags} />} >
         <Route path=':prodcutId' element={<Product tag={tags} />} />
       </Route> */}
-      <Route path='publisher/registration' element={<Register />} />
+      <Route path='publisher/register' element={<Register />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById("root")

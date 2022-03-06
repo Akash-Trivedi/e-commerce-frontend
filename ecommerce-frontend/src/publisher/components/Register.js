@@ -5,124 +5,125 @@
  */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
+import CreatePassword from './CreatePassword';
 
-function Register() {
+
+export default function Register() {
   /**
    * render the registration form
    */
+  let otp = "123456";
+  const [otpSent, updateForm] = React.useState(false);
+  const [otpValid, renderPasswordForm] = React.useState(false);
 
-  let data = { 'contact': '', 'password': '' }
-  let style = {display: "none",color: "red"};
-
-  function checkPassword(event) {
+  function checkContactLength(event) {
     /**
-     * called when the second input box for the password is active, to check if the characters are same in both the input box or not
-     * should be active if-only-if the first input password is not empty
+     * apply regex for the input
      */
-
-    var a = document.getElementById('password-match');
-
-    if (event.target.value !== data['password']) {
-      a.style.display = 'inline-block';
-    } else {
-      a.style.display = 'none';
+    let contactRegex = '^[6-9]{1}[0-9]{9}';
+    let contactLength = event.target.value.length;
+    if (contactLength === 10) {
+      document.getElementById("send-otp").addEventListener("click", sendOtp);
+      document.getElementById("send-otp").disabled = false;
+      updateForm(false);
+    } else if (contactLength > 10) {
+      document.getElementById("send-otp").disabled = true;
+      document.getElementById("send-otp").removeEventListener("click", sendOtp);
+      updateForm(false);
     }
   }
 
-  function updateData(event) {
+  function sendOtp(event) {
     /**
-     * updates the defualt value for the data object that was first initialized at the time of load the component with the new values.
+     * call the otp service and then update the state of the application
      */
-
-    data[event.target.name] = event.target.value;
+    otp = "123456";
+    console.log("otp service called");
+    document.getElementById("contact").disabled = true;
+    updateForm((prev) => { return !prev });
   }
 
-  function showContent(event) {
-    /**
-     * every call updates the input type: text/password
-     * sets the type of primary input to both inputs
-     */
-
-
-    var inputBox1 = document.getElementById("password1");
-    (inputBox1.type === 'password' ? inputBox1.type = 'text' : inputBox1.type = 'password')
-    document.getElementById("password2").type = inputBox1.type;
-
+  function confirmOtp(event) {
+    let userOtp = document.getElementById("otp-input-box").value;
+    console.log(otp);
+    if (otp.localeCompare(userOtp) == 0) {
+      document.getElementById("otp-input-box").disabled = true;
+      renderPasswordForm(true);
+    } else {
+      alert("wrong otp, please try again");
+    }
   }
+
+  function checkOtpLength(event) {
+    /**
+     * 
+     */
+    let otp = '^[1-9]{1}[0-9]{5}';
+    let otpLenght = event.target.value.length;
+    if (otpLenght === 6) {
+      document.getElementById("confirm-otp").disabled = false;
+      document.getElementById("confirm-otp").addEventListener("click", confirmOtp);
+    } else if (otpLenght > 6) {
+      document.getElementById("confirm-otp").disabled = true;
+      document.getElementById("confirm-otp").removeEventListener("click", confirmOtp);
+    }
+  }
+
   return (
     <div className="flex justify-center px-6 my-12">
       <div className="w-full xl:w-3/4 lg:w-11/12 flex">
-        <div className="w-full lg:w-7/12 bg-white p-5 rounded-lg lg:rounded-l-none">
-          <h3 className="pt-4 text-2xl text-center">Register yourself as Publisher !</h3>
-          <form className="px-8 pt-6 pb-8 mb-4 bg-white rounded" method='POST' action='localhost:8000/publisher/register'>
-            <div className="mb-4 md:flex md:justify-between">
-              <div className="mb-4 md:mr-2 md:mb-0">
-                <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="firstName">
-                  Contact
+        <div className="w-full lg:w-6/12 bg-white p-5 rounded-lg lg:rounded-l-none">
+          <h3 className="text-2xl text-center">Register yourself as Publisher !</h3>
+
+          <form onSubmit={sendOtp} className="px-8 pt-6 pb-8 mb-4 bg-white rounded" method='POST'>
+            {/* contact number */}
+            <div className="mb-4 md:flex md:justify-center">
+              <div className="mb-2 md:mr-2 md:mb-0">
+                <label className="block mb-2 text-sm text-center font-bold text-gray-700" htmlFor="firstName">
+                  Contact Number
                 </label>
                 <input
-                  className="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                  className="w-full mb-3 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                   id="contact"
                   type="text"
                   name='contact'
                   placeholder="+91"
                   required
-                  onChange={updateData}
+                  onChange={checkContactLength}
                 />
+                {
+                  otpSent === false ?
+                    (<button id="send-otp" type='button' disabled
+                      className="w-full mb-3 px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline">send otp</button>)
+                    :
+                    (<div>
+                      <label className="block mb-2 text-sm text-center font-bold text-gray-700" htmlFor="firstName">
+                        OTP(one time password)
+                      </label>
+                      <input
+                        className="w-full text-center mb-3 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                        id="otp-input-box"
+                        type="text"
+                        name='contact'
+                        placeholder="enter opt here"
+                        required
+                        onChange={checkOtpLength}
+                      />
+                      <button id="confirm-otp" type='button' disabled
+                        className="w-full mb-3 px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline">confirm OTP</button>
+                    </div>
+                    )
+                }
+                {
+                  otpValid === true ? CreatePassword() : <div></div>
+                }
+                <hr className="mb-6 border-t" />
+                <div className="text-center text-sm">
+                  Already have an account?
+                  <Link to='publisher/login'>Login!</Link>
+                </div>
               </div>
-            </div>
-            <div className="mb-4 md:flex md:justify-between">
-              <div className="mb-4 md:mr-2 md:mb-0">
-                <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="password">
-                  Password
-                </label>
-                <input
-                  className="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border border-red-500 rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                  id="password1"
-                  type="password"
-                  placeholder="******************"
-                  required
-                  name='password'
-                  onChange={updateData}
-                />
-
-              </div>
-              <div className="md:ml-2">
-                <label className="block mb-2 text-sm font-bold text-gray-700" htmlFor="c_password">
-                  Confirm Password
-                </label>
-                <input
-                  className="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                  id="password2"
-                  type="password"
-                  placeholder="******************"
-                  required
-                  name='password2'
-                  onChange={checkPassword}
-                />
-              </div>
-
-            </div>
-            <p id='password-match' className="mb-2 text-sm font-bold text-gray-700" style={style}>passwords does not match</p>
-            <p>
-              <input type="checkbox" onClick={showContent} id="showPassword" />
-              <label htmlFor="showPassword" className='text-sm font-bold'>show password</label>
-            </p>
-            <div className="mb-6 text-center">
-              <button
-                className="w-full px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-              >
-                Register Account
-              </button>
-            </div>
-            <hr className="mb-6 border-t" />
-            <div className="text-center">
-              <a
-                className="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
-                href="./index.html"
-              >
-                Already have an account? Login!
-              </a>
             </div>
           </form>
         </div>
@@ -130,5 +131,3 @@ function Register() {
     </div>
   );
 }
-
-export default Register;

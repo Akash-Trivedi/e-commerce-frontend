@@ -13,7 +13,7 @@ import Header from "./main/components/Header";
 import Main from "./main/components/Main";
 import Footer from "./main/components/Footer";
 
-const APIROOTURL = 'http://127.0.0.1:8000/ecommerce/';
+const APIROOTURL = 'http://localhost:8000/ecommerce/';
 
 function App(props) {
   /**
@@ -33,7 +33,6 @@ function App(props) {
      */
     updateDataDictionary(
       (prev) => {
-        console.log(`dataDictionary -> `, prev);
         return {
           ...prev,
           "tags": jsonArray
@@ -44,17 +43,11 @@ function App(props) {
   /**
    * useEffect runs only when the component inside which it reside is rendered. The dependency array is optional and is recomended
    */
-
+  
   React.useEffect(() => {
     fetch(
-      `${APIROOTURL}product/tags-all`,
-      {
-        method: 'GET',
-        headers: {
-          "Access-Control-Allow-Origin": ["localhost:8000", "127.0.0.1:8000"],
-          "Content-Type": "application/json"
-        }
-      })
+      `${APIROOTURL}product/tags-all`
+      )
       .then(res => res.json())
       .then(res => setTags(res))
       .catch(
@@ -62,10 +55,10 @@ function App(props) {
           console.log("error encountered was: ", error);
           // dataDictionary.tags=[];
         })
-  }, []);
-
-  return (
-    <>
+      }, []);
+      
+      return (
+        <>
       <Header title={WEBSITETITLE} />
       <Main productList={dataDictionary.products} tagList={dataDictionary.tags} />
       <Footer tagList={dataDictionary.tags} />
@@ -73,3 +66,12 @@ function App(props) {
   );
 }
 export default App;
+
+// {
+//   mode:'cors',
+//   headers: {
+//     "Content-Type": "application/json",
+//     "Access-Control-Allow-Methods": ["GET"],
+//     "Access-Control-Request-Headers":["Options","Origin"],
+//   }
+// }

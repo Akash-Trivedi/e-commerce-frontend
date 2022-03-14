@@ -12,12 +12,10 @@ import { Link } from 'react-router-dom';
 export default function ProductPreview(props) {
     const product = props.product;
     const link = product.company + '/' + product.name + '/';
-    function clicked() {
-
-    }
+    console.log(product);
     return (
-        <div className="lg:w-1/4 md:w-1/2 p-4 w-full" onClick={clicked}>
-            <Link to={`/product/${product.id}/`} key={product.name}>
+        <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+            <Link to={`/product/${product.productId}/`} key={product.productId}>
                     <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="https://dummyimage.com/420x260" />
                 <div className="mt-4">
                     <h3 className="text-gray-500 text-xs tracking-widest title-font mb-1">{product.company}</h3>

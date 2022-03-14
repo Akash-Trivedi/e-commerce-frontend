@@ -38,6 +38,6 @@
         "[json]": {
             "editor.defaultFormatter": "vscode.json-language-features"
         },
-        "editor.wordWrapColumn": 85
+        "editor.wordWrapColumn": 100
     }
 }

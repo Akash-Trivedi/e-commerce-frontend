@@ -21,7 +21,7 @@ export default function CreatePassword(props) {
 
       console.log("waiting for fetch to complete");
       try {
-        let response = await fetch('http://127.0.0.1:8000/api/register-publisher/', {
+        let response = await fetch('http://127.0.0.1:8000/api/register-cutomer/', {
           method: "POST",
           type: "cors",
           body: `{

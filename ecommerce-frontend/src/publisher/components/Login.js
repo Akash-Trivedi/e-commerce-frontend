@@ -67,7 +67,7 @@ function Login(props) {
 
         <p className="mt-12 text-xs text-center font-light text-gray-800">
           Don't have an account?
-          <Link to="publisher/registration"> Create One </Link>
+          <Link to="register"> Create One </Link>
         </p>
       </div>
     </div>

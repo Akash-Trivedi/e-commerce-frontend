@@ -7,16 +7,24 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import CreatePassword from './CreatePassword';
+import ReactLoading from 'react-loading';
 
+let baseurl = '127.0.0.1:8000/api/';
 
 export default function Register() {
+  console.log("register called");
   /**
    * render the registration form
    */
-  let otp = "123456";
-  const [otpSent, updateForm] = React.useState(false);
-  const [otpValid, renderPasswordForm] = React.useState(false);
-
+  let [formData, updateForm] = React.useState({
+    "otpSent": false,
+    "otp": "",
+    "userData": {
+      "contact": "", "password": ""
+    }
+  });
+  let [otpValid, renderPasswordForm] = React.useState(false);
+  
   function checkContactLength(event) {
     /**
      * apply regex for the input
@@ -24,13 +32,12 @@ export default function Register() {
     let contactRegex = '^[6-9]{1}[0-9]{9}';
     let contactLength = event.target.value.length;
     if (contactLength === 10) {
-      document.getElementById("send-otp").addEventListener("click", sendOtp);
       document.getElementById("send-otp").disabled = false;
-      updateForm(false);
+      formData.userData.contact = event.target.value;
+      document.getElementById("send-otp").addEventListener("click", sendOtp);
     } else if (contactLength > 10) {
-      document.getElementById("send-otp").disabled = true;
       document.getElementById("send-otp").removeEventListener("click", sendOtp);
-      updateForm(false);
+      document.getElementById("send-otp").disabled = true;
     }
   }
 
@@ -38,16 +45,35 @@ export default function Register() {
     /**
      * call the otp service and then update the state of the application
      */
-    otp = "123456";
-    console.log("otp service called");
     document.getElementById("contact").disabled = true;
-    updateForm((prev) => { return !prev });
+    async function getOtp(contactNumber) {
+      /**
+       * send the request for the otp, to specified contact number
+       * response contains either otp or user already exists
+       */
+      let response = await fetch(`http://127.0.0.1:8000/otp/${contactNumber}/`, {
+        method: "GET"
+      });
+      let otp = await response.json();
+      return otp.serverotp;
+    }
+    let a = getOtp(formData.userData.contact);
+    a.then(otp => {
+      updateForm(
+        (prev) => {
+          return {
+            ...prev,
+            "otp": otp.toString(),
+            "otpSent": true
+          }
+        }
+      )
+    });
   }
 
   function confirmOtp(event) {
     let userOtp = document.getElementById("otp-input-box").value;
-    console.log(otp);
-    if (otp.localeCompare(userOtp) == 0) {
+    if ((formData.otp).localeCompare(userOtp) == 0) {
       document.getElementById("otp-input-box").disabled = true;
       renderPasswordForm(true);
     } else {
@@ -69,14 +95,15 @@ export default function Register() {
       document.getElementById("confirm-otp").removeEventListener("click", confirmOtp);
     }
   }
+  // <ReactLoading type={"bubbles"} color={"blue"} height={667} width={375} />
 
   return (
-    <div className="flex justify-center px-6 my-12">
+    <div className="flex justify-center px-6 my-4">
       <div className="w-full xl:w-3/4 lg:w-11/12 flex">
         <div className="w-full lg:w-6/12 bg-white p-5 rounded-lg lg:rounded-l-none">
           <h3 className="text-2xl text-center">Register yourself as Publisher !</h3>
 
-          <form onSubmit={sendOtp} className="px-8 pt-6 pb-8 mb-4 bg-white rounded" method='POST'>
+          <form className="px-8 pt-6 pb-8 mb-4 bg-white rounded" method='POST'>
             {/* contact number */}
             <div className="mb-4 md:flex md:justify-center">
               <div className="mb-2 md:mr-2 md:mb-0">
@@ -93,7 +120,7 @@ export default function Register() {
                   onChange={checkContactLength}
                 />
                 {
-                  otpSent === false ?
+                  formData.otpSent === false ?
                     (<button id="send-otp" type='button' disabled
                       className="w-full mb-3 px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline">send otp</button>)
                     :
@@ -116,7 +143,7 @@ export default function Register() {
                     )
                 }
                 {
-                  otpValid === true ? CreatePassword() : <div></div>
+                  otpValid === true ? <CreatePassword data={formData.userData} /> : <div></div>
                 }
                 <hr className="mb-6 border-t" />
                 <div className="text-center text-sm">

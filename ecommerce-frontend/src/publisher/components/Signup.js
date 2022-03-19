@@ -4,40 +4,42 @@
  * functionality: render the registration form
  */
 
-import React from 'react';
-import { Link } from 'react-router-dom';
-import CreatePassword from './CreatePassword';
-import ReactLoading from 'react-loading';
+import React from 'react'
+import {
+  Link, NavLink, useNavigate
+} from 'react-router-dom'
+import CreatePassword from './CreatePassword'
+import ReactLoading from 'react-loading'
+import { SpeakerNotesOffSharp } from '@material-ui/icons';
 
-let baseurl = '127.0.0.1:8000/api/';
-
-export default function Register() {
-  console.log("register called");
+export default function Signup() {
+  const navigate = useNavigate();
+  console.log("register called")
   /**
    * render the registration form
    */
   let [formData, updateForm] = React.useState({
-    "otpSent": false,
-    "otp": "",
-    "userData": {
-      "contact": "", "password": ""
+    otpSent: false,
+    otp: null,
+    userData: {
+      username: null, password: null
     }
-  });
-  let [otpValid, renderPasswordForm] = React.useState(false);
-  
+  })
+  let [otpValid, renderPasswordForm] = React.useState(false)
+
   function checkContactLength(event) {
     /**
      * apply regex for the input
      */
-    let contactRegex = '^[6-9]{1}[0-9]{9}';
-    let contactLength = event.target.value.length;
-    if (contactLength === 10) {
-      document.getElementById("send-otp").disabled = false;
-      formData.userData.contact = event.target.value;
-      document.getElementById("send-otp").addEventListener("click", sendOtp);
-    } else if (contactLength > 10) {
-      document.getElementById("send-otp").removeEventListener("click", sendOtp);
-      document.getElementById("send-otp").disabled = true;
+    let contactRegex = '^[6-9]{1}[0-9]{9}'
+
+    if (event.target.value.length === 10) {
+      document.getElementById("send-otp").disabled = false
+      formData.userData.username = event.target.value
+      document.getElementById("send-otp").addEventListener("click", sendOtp)
+    } else if (event.target.value.length > 10) {
+      document.getElementById("send-otp").removeEventListener("click", sendOtp)
+      document.getElementById("send-otp").disabled = true
     }
   }
 
@@ -45,39 +47,37 @@ export default function Register() {
     /**
      * call the otp service and then update the state of the application
      */
-    document.getElementById("contact").disabled = true;
+
     async function getOtp(contactNumber) {
       /**
        * send the request for the otp, to specified contact number
        * response contains either otp or user already exists
        */
-      let response = await fetch(`http://127.0.0.1:8000/otp/${contactNumber}/`, {
-        method: "GET"
-      });
-      let otp = await response.json();
-      return otp.serverotp;
+      let response = await fetch(`http://127.0.0.1:8000/api/otp/${contactNumber}/`)
+      response = await response.json()
+      return response
     }
-    let a = getOtp(formData.userData.contact);
-    a.then(otp => {
-      updateForm(
-        (prev) => {
-          return {
-            ...prev,
-            "otp": otp.toString(),
-            "otpSent": true
-          }
+
+    let response = getOtp(formData.userData.username)
+    response.then(response => {
+      updateForm(prev => {
+        if (response.status === 200) {
+          return { ...prev, otp: response.otpFromServer, otpSent: true }
         }
-      )
-    });
+      })
+    })
+    response.catch(err => console.log(err))
+
   }
 
   function confirmOtp(event) {
-    let userOtp = document.getElementById("otp-input-box").value;
-    if ((formData.otp).localeCompare(userOtp) == 0) {
-      document.getElementById("otp-input-box").disabled = true;
-      renderPasswordForm(true);
+    let userOtp = document.getElementById("otp-input-box").value
+    console.log(userOtp, '', formData.otp)
+    if ((userOtp).localeCompare(String(formData.otp)) == 0) {
+      document.getElementById("otp-input-box").disabled = true
+      renderPasswordForm(true)
     } else {
-      alert("wrong otp, please try again");
+      alert("wrong otp, please try again")
     }
   }
 
@@ -85,17 +85,16 @@ export default function Register() {
     /**
      * 
      */
-    let otp = '^[1-9]{1}[0-9]{5}';
-    let otpLenght = event.target.value.length;
+    let otp = '^[1-9]{1}[0-9]{5}'
+    let otpLenght = event.target.value.length
     if (otpLenght === 6) {
-      document.getElementById("confirm-otp").disabled = false;
-      document.getElementById("confirm-otp").addEventListener("click", confirmOtp);
+      document.getElementById("confirm-otp").disabled = false
+      document.getElementById("confirm-otp").addEventListener("click", confirmOtp)
     } else if (otpLenght > 6) {
-      document.getElementById("confirm-otp").disabled = true;
-      document.getElementById("confirm-otp").removeEventListener("click", confirmOtp);
+      document.getElementById("confirm-otp").disabled = true
+      document.getElementById("confirm-otp").removeEventListener("click", confirmOtp)
     }
   }
-  // <ReactLoading type={"bubbles"} color={"blue"} height={667} width={375} />
 
   return (
     <div className="flex justify-center px-6 my-4">
@@ -111,7 +110,7 @@ export default function Register() {
                   Contact Number
                 </label>
                 <input
-                  className="w-full mb-3 px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                  className="w-full mb-3 px-3 py-2 text-center text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
                   id="contact"
                   type="text"
                   name='contact'
@@ -148,7 +147,7 @@ export default function Register() {
                 <hr className="mb-6 border-t" />
                 <div className="text-center text-sm">
                   Already have an account?
-                  <Link to='publisher/login'>Login!</Link>
+                  <NavLink to='/publisher-login/' className="text-blue-600 hover:text-gray-800">Login</NavLink>
                 </div>
               </div>
             </div>
@@ -156,5 +155,5 @@ export default function Register() {
         </div>
       </div>
     </div>
-  );
+  )
 }

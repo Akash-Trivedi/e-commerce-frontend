@@ -7,7 +7,7 @@
     "settings": {
         "zenMode.hideLineNumbers": false,
         "zenMode.hideTabs": false,
-        "editor.fontSize": 22,
+        "editor.fontSize": 20,
         "editor.detectIndentation": false,
         "editor.minimap.enabled": false,
         "editor.tabSize": 2,
@@ -38,6 +38,6 @@
         "[json]": {
             "editor.defaultFormatter": "vscode.json-language-features"
         },
-        "editor.wordWrapColumn": 100
+        "editor.wordWrapColumn": 110
     }
 }

@@ -21,20 +21,17 @@ export default function CreatePassword(props) {
 
       console.log("waiting for fetch to complete");
       try {
-        let response = await fetch('http://127.0.0.1:8000/api/register-publisher/', {
+        let response = await fetch('http://127.0.0.1:8000/api/publisher/signup/', {
           method: "POST",
           type: "cors",
-          body: `{
-            "contact": "8980702003",
-            "password": "1234"
-          }`,
+          body: JSON.stringify(userFinalData),
           headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
           }
         });
-        console.log("fetch completed");
         response = await response.json();
+        console.log("fetch completed");
         return response;
       } catch (error) {
         console.log(error);
@@ -42,6 +39,8 @@ export default function CreatePassword(props) {
     }
 
     let a = sendUserData(userFinalData);
+    a.then(res=>console.log(res))
+    a.catch(err=>console.log(err))
   }
 
   function showContent(event) {

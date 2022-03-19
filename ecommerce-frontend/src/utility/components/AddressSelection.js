@@ -4,48 +4,67 @@
  * functionality: custom address selection for dilevery
  * caller-function: ecommerce-frontend\src\index.js
  */
+import { LocalGroceryStoreTwoTone } from '@material-ui/icons';
 import React from 'react'
+import locations from '../../AllowedLocations';
+
 
 function AddressSelection() {
+  /**
+   * render the devlivery selection component
+   */
+  let [formData, setData] = React.useState({
+    state: null,
+    city: null,
+    address: null
+  })
 
-  function printFinalForm() {
-    /**
-     * prints the contents of the form data
-     */
-  }
-
-  function getLocation(event) {
+  function sendDataToServer(event) {
     /**
      * 
      */
-    event.preventDefault();
-    let pincode = 208012;
-    async function getLocationDetails(pincode) {
-      let response = await fetch(`https://api.postalpincode.in/pincode/${pincode}`, {
-        mode: 'no-cors',
-        headers: {
-          'Accept':'text/html,application/xhtml+xml',
-          'Accept-Encoding': 'gzip, deflate, br',
-          'Content-Length': '2000',
-          'Content-Type': 'application/json'
-        }
-      });
-      return response;
-    }
-    getLocationDetails(pincode)
-      .then(res => console.log(res))
-      .catch(error => console.log("Error ocured: " + error));
+
   }
+
+  function changeState(event) {
+    /**
+     * update the address locations
+     */
+    setData((prev) => {
+      return {
+        ...prev,
+        [event.target.name]: event.target.value
+      }
+    })
+
+  }
+
+
   return (
-    <div className='container my-8'>
-      <form onSubmit={getLocation} method="get">
-        <select name="cars" id="cars">
-          <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="mercedes">Mercedes</option>
-          <option value="audi">Audi</option>
+    <div className='container'>
+      <form onSubmit={sendDataToServer} method="get">
+        <div>
+          <label htmlFor="address">Delivery Address: </label>
+          <textarea name="address" cols="10" rows="1" onChange={changeState}></textarea>
+        </div>
+        <select name='state' onChange={changeState}>
+          <option value=''>select state</option>
+          {
+            Object.keys(locations.data).map(item => {
+              return <option value={item}>{item}</option>
+            })
+          }
         </select>
-        <button type='submit'>Click me to get location</button>
+        <select name='city' onChange={changeState}>
+          <option value=''>select city</option>
+          {
+            formData.state !== null ? (
+              locations.data[formData.state].map(item => {
+                return <option value={item}>{item}</option>
+              }))
+              : null
+          }
+        </select>
       </form>
     </div>
   )

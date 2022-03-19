@@ -86,12 +86,3 @@ function App(props) {
   );
 }
 export default App;
-
-// {
-//   mode:'cors',
-//   headers: {
-//     "Content-Type": "application/json",
-//     "Access-Control-Allow-Methods": ["GET"],
-//     "Access-Control-Request-Headers":["Options","Origin"],
-//   }
-// }

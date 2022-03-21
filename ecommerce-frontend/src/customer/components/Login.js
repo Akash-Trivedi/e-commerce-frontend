@@ -24,7 +24,7 @@ function Login(props) {
       ...formData, [event.target.id]: event.target.value
     }
   }
-  function publisherLogin(event) {
+  function customerLogin(event) {
     event.preventDefault();
     let response = fetch(`${APIROOTURL}`)
   }
@@ -45,7 +45,7 @@ function Login(props) {
         <div className="py-4 px-4 rounded-x1">
           <h1 className="font-medium text-2xl mt-1 text-center">Customer Login</h1>
           {/* login form */}
-          <form onSubmit={publisherLogin} className="mt-6">
+          <form onSubmit={customerLogin} className="mt-6">
             <div className="my-5 text-sm">
               <label htmlFor="contact" className="block text-black">Contact</label>
               <input type="text" autoFocus id="contact" className="rounded-sm px-4 py-3 mt-3 focus:outline-none bg-gray-100 w-full" placeholder="+91" onChange={updateFormData} />
@@ -69,7 +69,7 @@ function Login(props) {
 
           <p className="mt-12 text-xs text-center font-light text-gray-800">
             Don't have an account?
-            <Link to="publisher/registration"> Create One </Link>
+            <NavLink to="customer-signup"> Create One </NavLink>
           </p>
         </div>
       </div>

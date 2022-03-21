@@ -52,10 +52,8 @@ ReactDOM.render(
       <Route path='product'>
         <Route path=":productId" element={<Product rooturl={APIROOTURL} />} />
       </Route>
-      <Route path='dashboard' element={<Dashboard componentMap={componentMap} />} />
       <Route path='token' element={<TokenTest />} />
       <Route path='update-profile' element={<UpdateProfile />} />
-      <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById("root")

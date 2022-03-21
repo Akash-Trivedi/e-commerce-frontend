@@ -5,11 +5,14 @@
  * caller-function: ecommerce-frontend\src\publisher\components\Register.js
  */
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import {
+  TextField, Button, FormGroup, FormControlLabel, Checkbox
+} from '@mui/material'
+
 
 export default function CreatePassword(props) {
-  /**
-   * renders two box for password creation with password matching ability
-   */
+  let navigate = useNavigate()
   let userFinalData = props.data;
   let data = { "password1": "", "password2": "" };
   let style = { display: "none", color: "red" };
@@ -38,27 +41,20 @@ export default function CreatePassword(props) {
       }
     }
 
-    let a = sendUserData(userFinalData);
-    a.then(res=>console.log(res))
-    a.catch(err=>console.log(err))
+    let token = sendUserData(userFinalData);
+    token.then(token => {
+      console.log(token)
+    })
+    token.catch(err => console.log(err))
   }
 
   function showContent(event) {
-    /**
-     * every call updates the input type: text/password
-     * sets the type of primary input to both inputs
-     */
-
     var inputBox1 = document.getElementById("password1");
     (inputBox1.type === 'password' ? inputBox1.type = 'text' : inputBox1.type = 'password')
     document.getElementById("password2").type = inputBox1.type;
   }
 
   function isPasswordEqual(event) {
-    /**
-     * called to check if both the passwords are same or not, but only when the input box 2nd is not empty.
-     */
-
     let a = document.getElementById('password-match');
 
     if (document.getElementById("password2").value.length !== 0) {
@@ -75,50 +71,25 @@ export default function CreatePassword(props) {
   }
 
   function updateData(event) {
-    /**
-     * updates the defualt value for the data object that was first initialized at the time of load the component with the new values.
-     */
-
     userFinalData.password = event.target.value;
     data[event.target.id] = event.target.value;
-    console.log(data);
     isPasswordEqual(event);
   }
 
   return (
     <div>
       {/* 2 box password password with show password*/}
-      <label className="block mb-2 text-sm text-center font-bold text-gray-700" htmlFor="password">
-        Password
-      </label>
-      <input
-        className="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border border-red-500 rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-        id="password1"
-        type="password"
-        placeholder="******************"
-        required
-        name='password1'
-        onChange={updateData}
-      />
-      <label className="block mb-2 text-sm text-center font-bold text-gray-700" htmlFor="c_password">
-        Confirm Password
-      </label>
-      <input
-        className="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-        id="password2"
-        type="password"
-        placeholder="******************"
-        required
-        name='password2'
-        onChange={updateData}
-      />
+      <br /> <br />
+      <TextField name='password1' id='password1' label="password" type="password" onChange={updateData} />
+      <br /> <br />
+      <TextField name='password2' id='password2' label="confirm password" type="password" onChange={updateData} />
+      <br /> <br />
       <span id='password-match' className="mb-2 text-sm font-bold text-gray-700" style={style}>passwords does not match</span>
-      <p>
-        <input type="checkbox" onClick={showContent} id="showPassword" />
-        <label htmlFor="showPassword" className='text-sm font-bold'>show password</label>
-      </p>
-      <button id="signup" type='button'
-        className="w-full mb-3 px-4 py-2 font-bold text-white bg-blue-500 rounded-full hover:bg-blue-700 focus:outline-none focus:shadow-outline">signup</button>
+      <br /> <br />
+      <FormControlLabel id="showPassword" control={<Checkbox defaultChecked />} onChange={showContent} label="show password" />
+      <br /> <br />
+      <Button id="signup" type='button' variant='contained' color='primary'>signup</Button>
+      <br /> <br />
     </div>
   )
 }

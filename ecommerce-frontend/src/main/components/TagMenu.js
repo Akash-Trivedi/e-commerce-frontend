@@ -1,13 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import {
+  Chip
+} from '@mui/material'
+
 
 function TagMenu(props) {
-  const tag = props.tag;
+  const navigate = useNavigate()
+  const tag = props.tag
   return (
-    <Link to='/' currentTag={tag.tagName} className="px-3 py-1 rounded-full text-white bg-black text-sm flex align-center cursor-pointer active:bg-black transition duration-300 ease">
-      {tag.tagName}
-    </Link>
-  );
+    <Chip variant="outlined" onClick={() => { navigate('/', { label: tag.tagId }) }} label={tag.tagName}/>
+  )
 }
 
-export default TagMenu;
+export default TagMenu

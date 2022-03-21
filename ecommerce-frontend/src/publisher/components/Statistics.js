@@ -7,41 +7,57 @@
  */
 
 import React from "react";
+import { useLocation } from 'react-router-dom'
 
-function Statistics(props) {
-    const publisherShopPhoto='props.shopphoto';
-
-    return (
-        <section className="text-gray-600 body-font">
-            <div className="container px-5 py-24 mx-auto flex flex-wrap">
-                <div className="flex flex-wrap -mx-4 mt-auto mb-auto lg:w-1/2 sm:w-2/3 content-start sm:pr-10">
-                    <div className="w-full sm:p-4 px-4 mb-6">
-                        <h1 className="title-font font-medium text-xl mb-2 text-gray-900">Moon hashtag pop-up try-hard offal truffaut</h1>
-                        <div className="leading-relaxed">Pour-over craft beer pug drinking vinegar live-edge gastropub, keytar neutra sustainable fingerstache kickstarter.</div>
-                    </div>
-                    <div className="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
-                        <h2 className="title-font font-medium text-3xl text-gray-900">2.7K</h2>
-                        <p className="leading-relaxed">Users</p>
-                    </div>
-                    <div className="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
-                        <h2 className="title-font font-medium text-3xl text-gray-900">1.8K</h2>
-                        <p className="leading-relaxed">Subscribes</p>
-                    </div>
-                    <div className="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
-                        <h2 className="title-font font-medium text-3xl text-gray-900">35</h2>
-                        <p className="leading-relaxed">Downloads</p>
-                    </div>
-                    <div className="p-4 sm:w-1/2 lg:w-1/4 w-1/2">
-                        <h2 className="title-font font-medium text-3xl text-gray-900">4</h2>
-                        <p className="leading-relaxed">Products</p>
-                    </div>
-                </div>
-                <div className="lg:w-1/2 sm:w-1/3 w-full rounded-lg overflow-hidden mt-6 sm:mt-0">
-                    <img className="object-cover object-center w-full h-full" src="https://dummyimage.com/600x300" alt={publisherShopPhoto}>
-                </div>
-            </div>
-        </section>
-    );
+function Statistics() {
+  const location = useLocation();
+  let i = 0
+  const shops = location.state.shops;
+  return (
+    <section className="text-gray-600 body-font">
+      {/* for scrolling use classname=overflow-auto h-screen */}
+      <div className="container px-0 py-4 mx-auto overflow-auto h-screen">
+        <div className="flex flex-col text-center w-full mb-6">
+          <h1 className="sm:text-4xl text-3xl font-medium title-font mb-2 text-gray-900">Reports for all the Shops</h1>
+          <p className="lg:w-6/7 mx-auto leading-relaxed text-base"></p>
+        </div>
+        <div className="lg:w-6/7 w-full mx-auto overflow-auto">
+          <table className="table-auto w-full border-2 border-black whitespace-no-wrap">
+            <thead className=" border-2 border-black">
+              <tr>
+                <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">SNo.</th>
+                <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tl rounded-bl">Name</th>
+                <th className="px-6 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Location</th>
+                <th className="px-2 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Sales(&#8377;)</th>
+                <th className="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">Best Seller</th>
+                <th className="w-10 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100 rounded-tr rounded-br"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                shops.map((shop) => {
+                  ++i
+                  return <SingleShopStatistic data={shop} count={i} key={shop.shopId} />
+                })
+              }
+            </tbody>
+          </table>
+        </div>
+      </div >
+    </section >
+  );
 }
 
+function SingleShopStatistic(props) {
+  const shopData = props.data
+  return (
+    <tr className="capitalize">
+      <td className="px-4 py-3">{props.count}</td>
+      <td className="px-4 py-3">{shopData.name}</td>
+      <td className="px-4 py-3">{shopData.address}, {shopData.city}, {shopData.state}</td>
+      <td className="px-4 py-3">{shopData.sales}</td>
+      <td className="px-4 py-3 text-lg text-gray-900">Free</td>
+    </tr>
+  );
+}
 export default Statistics;

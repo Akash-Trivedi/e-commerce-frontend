@@ -8,12 +8,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Register from './Signup';
+import {
+  Button, TextField, FormControlLabel, Checkbox, Container
+} from '@mui/material'
+
+
 const APIROOTURL = 'http://127.0.0.1:8000/ecommerce/';
 
-function Login(props) {
+export default function Login(props) {
   /**
    * setup the login by choosing the database, tokens and render
    */
+  let localToken = localStorage.getItem('access')
   let formData = { contactId: null, password: null };
   console.log("publisher login");
   function updateFormData(event) {
@@ -36,6 +42,7 @@ function Login(props) {
         body: JSON.stringify(formData),
         method: 'POST',
         headers: {
+          "Authentication": localToken === null ? localToken : 'JWT ' + localToken,
           'Content-Type': 'application/json'
         }
       });
@@ -59,28 +66,22 @@ function Login(props) {
   return (
     <div className="bg-white lg:w-4/12 md:6/12 w-10/12 m-auto my-10 shadow-md">
       <div className="py-4 px-4 rounded-x1">
-        <h1 className="font-medium text-2xl mt-1 text-center">Publisher Login</h1>
+        <h1 className="font-medium text-2xl mt-1 text-center">Publishers Login here</h1>
         {/* login form */}
-        <form onSubmit={publisherLogin} className="mt-6">
+        <form onSubmit={publisherLogin} className="mt-6 text-center">
           <div className="my-5 text-sm">
-            <label htmlFor="contact" className="block text-black">Contact</label>
-            <input type="text" autoFocus name='contactId' id="contact" value={formData.contactId} className="rounded-sm px-4 py-3 mt-3 focus:outline-none bg-gray-100 w-full" placeholder="+91" onChange={updateFormData} />
+            <TextField name='contactId' id="contact" label="+91" type="text" onChange={updateFormData} value={formData.contactId} required />
           </div>
-          <div className="my-5 text-sm">
-            <label htmlFor="password" className="block text-black">Password</label>
-            <input type="password" id="password" name='password' value={formData.password} className="rounded-sm px-4 py-3 mt-3 focus:outline-none bg-gray-100 w-full" placeholder="Password" onChange={updateFormData} />
-            <div className="flex justify-end mt-2 text-xs text-gray-600">
-              <a href="../../pages/auth/forget_password.html hover:text-black">Forget Password?</a>
-            </div>
+          <div className="my-3 text-sm">
+            <TextField name='password' id="password" label="password" type="password" onChange={updateFormData} value={formData.contactId} required />
+          </div>
+          <Link to='/'>Forget Password?</Link>
 
-          </div>
           {/* show password */}
-          <div className="my-5 text-sm">
-            <input type="checkbox" onClick={showContent} id="showPassword" />
-            <label htmlFor="showPassword" className="mt-1 text-xs text-gray-900">show password</label>
+          <div className="my-3 text-sm">
+            <FormControlLabel id="showPassword" control={<Checkbox />} onChange={showContent} label="show password" />
           </div>
-
-          <button type='submit' className="block text-center text-white bg-gray-800 p-3 duration-300 rounded-sm hover:bg-black w-full">Login</button>
+          <Button id="signup" type='submit' variant='contained' color='primary'>login</Button>
         </form>
 
         <p className="mt-12 text-xs text-center font-light text-gray-800">
@@ -91,5 +92,3 @@ function Login(props) {
     </div>
   );
 }
-
-export default Login;

@@ -26,32 +26,20 @@ function App(props) {
   const WEBSITETITLE = props.title;
 
   function setProducts(jsonArray) {
-    /**
-     * assign the jsonArray value to products key of dataDictionary,
-     * using its returned function. which will inturn re-render the component.
-     */
-    updateDataDictionary((prev) => {return {...prev,"products": jsonArray}});
+    updateDataDictionary((prev) => { return { ...prev, "products": jsonArray } });
   }
 
   function setTags(jsonArray) {
-    /**
-     * assign the jsonArray value to tags key of dataDictionary,
-     * using its returned function. which will inturn re-render the component.
-     */
-    updateDataDictionary((prev) => {return {...prev,"tags": jsonArray}});
+    updateDataDictionary((prev) => { return { ...prev, "tags": jsonArray } });
   }
-  /**
-   * useEffect runs only when the component inside which it reside is rendered. The dependency array is optional and is recomended
-   */
 
   React.useEffect(() => {
     async function getProducts(pincode) {
-      let response = await fetch(`${props.rooturl}product/list-all/${pincode}/`,
-        {
-          method: "GET",
-          "Content-Type": "application/json"
-        });
-      response = response.json();
+      let response = await fetch(`${props.rooturl}product/list-all/${pincode}/`, {
+        method: "GET",
+        "Content-Type": "application/json"
+      });
+      response = await response.json();
       return response;
     }
     async function getTags() {

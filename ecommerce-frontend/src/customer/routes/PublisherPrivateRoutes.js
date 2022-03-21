@@ -12,7 +12,7 @@ import Dashboard from '../components/Dashboard'
 import Shops from '../components/Shops'
 import NotFound from '../../utility/components/NotFound'
 import Profile from '../components/Profile'
-import UpdateProfile from '../../utility/components/UpdateProfile'
+import UpdateProfile from '../components/UpdateProfile'
 import Statistics from '../components/Statistics'
 import OrderHistory from '../components/OrderHistory'
 import Feedbacks from '../components/Feedbacks'
@@ -26,11 +26,11 @@ export default function PublisherPrivateRoutes() {
 
   return (
     <Routes>
-      <Route path='/publisher/dashboard' element={publisherActive ? <Dashboard active={publisherActive} /> : <Login active={false} />}>
+      <Route path='/dashboard' element={publisherActive ? <Dashboard active={publisherActive} /> : <Login active={false} />}>
         <Route path={'profile'} element={<Profile />} />
         <Route path='shops' element={<Shops />} />
         <Route path='sales-report' element={<Statistics />} />
-        <Route path='update-profile' element={<UpdateProfile link={'http://localhost:8000/api/customer/publisher-update-profile/'}/>} />
+        <Route path='update-profile' element={<UpdateProfile />} />
         <Route path='orders' element={<OrderHistory />} />
         <Route path='feedbacks' element={<Feedbacks />} />
         <Route path="*" element={<NotFound />} />

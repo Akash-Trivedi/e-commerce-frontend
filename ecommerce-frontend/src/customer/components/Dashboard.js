@@ -13,7 +13,6 @@
     * main dashboard for the publisher
     */
    const publisherActive = useLocation()
-   console.log(publisherActive);
    let totalSales = 0;
    let sideNavContent = {
      name: [

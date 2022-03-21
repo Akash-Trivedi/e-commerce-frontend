@@ -5,62 +5,51 @@
  * caller-function: ecommerce-frontend\src\App.js
  */
 
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Register from './Signup';
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import Register from './Signup'
 import {
   Button, TextField, FormControlLabel, Checkbox, Container
 } from '@mui/material'
 
 
-const APIROOTURL = 'http://127.0.0.1:8000/ecommerce/';
+const APIROOTURL = 'http://127.0.0.1:8000/ecommerce/'
 
 export default function Login(props) {
-  /**
-   * setup the login by choosing the database, tokens and render
-   */
-  let localToken = localStorage.getItem('access')
-  let formData = { contactId: null, password: null };
-  console.log("publisher login");
+  let navigate = useNavigate()
+  let formData = { username: null, password: null }
   function updateFormData(event) {
-    /**
-     * assign value of the event.target.id to formData, for easy post request
-     */
     formData = {
       ...formData, [event.target.name]: event.target.value
     }
   }
   function publisherLogin(event) {
-    /**
-     * login to publisher account, if true then move to dashboard else appropriate message
-     */
-
-    event.preventDefault();
+    event.preventDefault()
     async function login(data) {
       let response = await fetch('http://127.0.0.1:8000/api/publisher/login/', {
-        mode: 'cors',
         body: JSON.stringify(formData),
         method: 'POST',
         headers: {
-          "Authentication": localToken === null ? localToken : 'JWT ' + localToken,
           'Content-Type': 'application/json'
         }
-      });
-      response = await response.json();
-      return response;
+      })
+      response = await response.json()
+      return response
     }
-    let res = login(formData);
-    res.then(res => console.log(res));
-    res.catch(error => console.log(`error was : ${error}`));
+    let res = login(formData)
+    res.then(res => {
+      let a = res.data
+      if (res.status === 200) {
+        navigate('/dashboard', { state: true })
+      }
+    }
+    )
+    res.catch(error => console.log(`error was : ${error}`))
   }
 
   function showContent(event) {
-    /**
-     * every call updates the input type: text/password
-     * sets the type of primary input to both inputs
-     */
-    var inputPassword = document.getElementById("password");
-    (inputPassword.type === 'password' ? inputPassword.type = 'text' : inputPassword.type = 'password')
+    var inputPassword = document.getElementById("password")
+      (inputPassword.type === 'password' ? inputPassword.type = 'text' : inputPassword.type = 'password')
   }
 
   return (
@@ -70,10 +59,10 @@ export default function Login(props) {
         {/* login form */}
         <form onSubmit={publisherLogin} className="mt-6 text-center">
           <div className="my-5 text-sm">
-            <TextField name='contactId' id="contact" label="+91" type="text" onChange={updateFormData} value={formData.contactId} required />
+            <TextField name='username' id="contact" label="+91" type="text" onChange={updateFormData} value={formData.username} required />
           </div>
           <div className="my-3 text-sm">
-            <TextField name='password' id="password" label="password" type="password" onChange={updateFormData} value={formData.contactId} required />
+            <TextField name='password' id="password" label="password" type="password" onChange={updateFormData} value={formData.username} required />
           </div>
           <Link to='/'>Forget Password?</Link>
 
@@ -90,5 +79,5 @@ export default function Login(props) {
         </p>
       </div>
     </div>
-  );
+  )
 }

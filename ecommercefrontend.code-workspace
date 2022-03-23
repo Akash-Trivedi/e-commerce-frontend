@@ -7,9 +7,9 @@
     "settings": {
         "zenMode.hideLineNumbers": false,
         "zenMode.hideTabs": false,
-        "editor.fontSize": 20,
+        "editor.fontSize": 18,
         "editor.detectIndentation": false,
-        "editor.minimap.enabled": false,
+        "editor.minimap.enabled": true,
         "editor.tabSize": 2,
         "workbench.editor.showTabs": true,
         "workbench.editor.languageDetection": true,

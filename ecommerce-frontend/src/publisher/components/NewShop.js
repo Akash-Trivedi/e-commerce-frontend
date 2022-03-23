@@ -5,23 +5,60 @@
  * caller-function: ecommerce-frontend\src\publisher\components\Shops.js
  */
 import React from 'react';
+import {
+  Grid, TextField, Box, Button, fullWidth
+} from '@mui/material'
+
 
 export default function NewShop(props) {
-  // let userData=props.data;
-  /**
-   * this will fill the form with initial values, obatined after the login
-   */
-
   let [shopData, updateShop] = React.useState({
     name: '',
     pincode: '',
     address: '',
+    city: '',
+    state: ''
   });
 
+  function getLocation(pincode) {
+
+    async function getLocationInside(pincode) {
+      let response = await fetch(`https://api.postalpincode.in/pincode/${pincode}/`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        }
+      })
+      response = await response.json()
+      return response
+    }
+
+    let location = getLocationInside(pincode)
+    location.then(l => {
+      if (l[0].PostOffice !== null) {
+        l = {
+          city: l[0].PostOffice[0].Division,
+          state: l[0].PostOffice[0].State
+        }
+      } else {
+        l = {
+          city: 'invalid',
+          state: 'invalid'
+        }
+      }
+      updateShop((prevData) => {
+        return {
+          ...prevData,
+          pincode: pincode,
+          ...l
+        }
+      })
+    })
+    location.catch(err => {
+      console.log('some error')
+    })
+  }
+
   function registerShop(event) {
-    /**
-     * 
-     */
     event.preventDefault();
     async function updateDetails(data) {
       let response = await fetch(`http://127.0.0.1:8000/api/publisher/shop/add/`, {
@@ -41,30 +78,51 @@ export default function NewShop(props) {
   }
 
   function handleChange(event) {
-    updateShop((prevData) => {
-      return {
-        ...prevData,
-        [event.target.name]: event.target.value
-      }
-    });
+    if (event.target.name.localeCompare('pincode') === 0 && event.target.value.length >= 6) {
+      getLocation(event.target.value)
+    } else {
+      updateShop((prevData) => {
+        return {
+          ...prevData,
+          [event.target.name]: event.target.value
+        }
+      })
+    }
   }
+
   return (
-    <div className="container my-8 block p-6 rounded-lg shadow-lg bg-white max-w-md">
-      <form onSubmit={registerShop}>
-        <div className="form-group mb-6">
-          <input onChange={handleChange} type="text" className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" name='name' aria-describedby="emailHelp123" placeholder="Shop Name" value={shopData.name} />
-        </div>
-        <div className="form-group mb-6">
-          <input onChange={handleChange} type="text" className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" name='pincode'
-            aria-describedby="emailHelp124" placeholder="Area Pincode" value={shopData.pincode} />
-        </div>
-        <div className="form-group mb-6">
-          <textarea id="" cols="30" rows="2" onChange={handleChange} type="text" className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" name='address'
-            placeholder="Shop Address" value={shopData.address} ></textarea>
-        </div>
-        <button type='submit' className="w-full px-6 py-2.5 bg-blue-600 text-white font-medium
-           text-xs leading-tight rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Add</button>
+    <Box sx={{ p: 4, display: 'flex', justifyContent: 'center' }}>
+      <form onSubmit={registerShop} className='capitalize w-1/2'>
+        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
+          {/* row 2 */}
+          <Grid item xs={12}>
+            <TextField label='shop name' onChange={handleChange} type='text' value={shopData.name} name='name' fullWidth />
+          </Grid>
+
+          {/* row 3 */}
+          <Grid item xs={6}>
+            <TextField label='pincode' onChange={handleChange} type='text' value={shopData.pincode} name='pincode' fullWidth />
+          </Grid>
+
+          {/* row 4 */}
+          <Grid item xs={6}>
+            <TextField label='city' type='text' value={shopData.city} name='city' fullWidth />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField label='state' type='text' value={shopData.state} name='city' fullWidth />
+          </Grid>
+
+          {/* row 5 */}
+          <Grid item xs={12}>
+            <TextField label='address' onChange={handleChange} type='text' value={shopData.address} name='address' multiline maxRows={4} fullWidth />
+          </Grid>
+          <Box sx={{py:2, display: 'flex', justify:'center'}}>
+            <Grid item xs={12}>
+              <Button variant='contained' color='primary' type='submit' >add</Button>
+            </Grid>
+          </Box>
+        </Grid >
       </form>
-    </div>
-  );
+    </Box>
+  )
 }

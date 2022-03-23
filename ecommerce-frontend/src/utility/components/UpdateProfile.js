@@ -6,11 +6,15 @@
  */
 import React from 'react'
 import {
-  Button, TextField
+  Button, TextField, Grid, Avatar, Box
 } from '@mui/material'
+import {
+  UploadFile
+} from '@mui/icons-material'
+import { grey } from '@mui/material/colors'
 
-
-function UpdateProfile(props) {
+export default function UpdateProfile(props) {
+  const avatarSize = 250;
   const link = props.link
   let [formData, updateForm] = React.useState({
     firstName: '',
@@ -72,8 +76,9 @@ function UpdateProfile(props) {
       console.log('some error')
     })
   }
+
   function handleChange(event) {
-    if (event.target.name === 'pincode' && event.target.value.length >= 6) {
+    if (event.target.name.localeCompare('pincode') === 0 && event.target.value.length >= 6) {
       getLocation(event.target.value)
     } else {
       updateForm((prevData) => {
@@ -84,33 +89,47 @@ function UpdateProfile(props) {
       })
     }
   }
+
   return (
-    <div className='container my-8 block p-6 rounded-lg shadow-lg bg-white max-w-md '>
-      <form onSubmit={updateProfile} className='capitalize'>
-        <div className='grid grid-cols-2 gap-4'>
-          <TextField label='first name' onChange={handleChange} type='text' value={formData.firstName} name='firstName' margin='normal' />
-          <TextField label='last name' onChange={handleChange} type='text' value={formData.lastName} name='lastName' margin='normal' />
-        </div>
-        <div>
-          <TextField label='email' onChange={handleChange} type='text' value={formData.email} name='email' margin='normal' fullWidth />
-        </div>
-        <div className='grid grid-cols-2 gap-4'>
-          <TextField label='dob' onChange={handleChange} type='text' value={formData.dob} name='dob' margin='normal' />
-          <TextField label='pincode' onChange={handleChange} type='text' value={formData.pincode} name='pincode' margin='normal' />
-        </div>
-        <div className='grid grid-cols-2 gap-4'>
-          <TextField label='city' type='text' value={formData.city} name='city' margin='normal' aria-readonly />
-          <TextField label='state' type='text' value={formData.state} name='city' margin='normal' aria-readonly />
-        </div>
-        <div>
-          <TextField label='address' onChange={handleChange} type='text' value={formData.address} name='address' multiline maxRows={4} margin='normal' fullWidth />
-        </div>
-        <div>
-          <Button variant='contained' color='primary'>Update</Button>
-        </div>
-      </form>
+    <div className='container p-8'>
+      <Grid container spacing={2}>
+        <Grid xs={5} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <div>
+            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: avatarSize, height: avatarSize, bgcolor: grey[500], alignContent: 'center' }}>A</Avatar>
+          </div>
+          <br />
+          <div>
+            <Button variant="contained" startIcon={<UploadFile />}>upload</Button>
+          </div>
+        </Grid>
+        <Grid xs={5} sx={{ justifyContent: 'center', display: 'flex' }}>
+          <form onSubmit={updateProfile} className='capitalize'>
+            <div className='grid grid-cols-2 gap-4'>
+              <TextField label='first name' onChange={handleChange} type='text' value={formData.firstName} name='firstName' margin='normal' />
+              <TextField label='last name' onChange={handleChange} type='text' value={formData.lastName} name='lastName' margin='normal' />
+            </div>
+            <div>
+              <TextField label='email' onChange={handleChange} type='text' value={formData.email} name='email' margin='normal' fullWidth />
+            </div>
+            <div className='grid grid-cols-2 gap-4'>
+              <TextField label='dob' onChange={handleChange} type='text' value={formData.dob} name='dob' margin='normal' />
+              <TextField label='pincode' onChange={handleChange} type='text' value={formData.pincode} name='pincode' margin='normal' />
+            </div>
+            <div className='grid grid-cols-2 gap-4'>
+              <TextField label='city' type='text' value={formData.city} name='city' margin='normal' aria-readonly />
+              <TextField label='state' type='text' value={formData.state} name='city' margin='normal' aria-readonly />
+            </div>
+            <div>
+              <TextField label='address' onChange={handleChange} type='text' value={formData.address} name='address' multiline maxRows={4} margin='normal' fullWidth />
+            </div>
+            <div>
+              <Box sx={{ justifyContent: 'center', display: 'flex' }}>
+                <Button variant='contained' color='primary'>Update</Button>
+              </Box>
+            </div>
+          </form>
+        </Grid>
+      </Grid>
     </div>
   )
 }
-
-export default UpdateProfile

@@ -11,15 +11,19 @@ import React from "react";
 import TagListFooter from "./TagListFooter";
 import { Link, NavLink } from "react-router-dom";
 
-function Footer(props) {
+import {
+  Grid, Box
+} from '@mui/material'
+
+export default function Footer(props) {
   console.log("last component rendered");
   return (
-    <footer className="bg-white pt-20 lg:pt-[120px] pb-10 lg:pb-20 relative z-10">
-      <div className="container flex flex-wrap">
+    <Box>
+      <footer className="bg-white lg:pt-[120px] pb-10 lg:pb-20 relative z-10">
+        <Grid container columnGap={0} display='flex' direction='right' justifyContent='center'>
 
-        {/* column-1 */}
-        <div className="sm:w-1/2 lg:w-2/12 px-2">
-          <div className="w-full mb-10">
+          {/* column-1 */}
+          <Grid item xs={2}>
             <h4 className="text-dark text-lg font-semibold mb-9">Company</h4>
             <ul>
               <li>
@@ -29,12 +33,10 @@ function Footer(props) {
                 <NavLink to="javascript:void(0)" className="inline-block text-base text-body-color hover:text-primary leading-loose mb-2">Support</NavLink>
               </li>
             </ul>
-          </div>
-        </div>
+          </Grid>
 
-        {/* column-2 */}
-        <div className="sm:w-1/2 lg:w-2/12 px-2">
-          <div className="w-full mb-10">
+          {/* column-2 */}
+          <Grid item xs={2}>
             <h4 className="text-dark text-lg font-semibold mb-9">publisher</h4>
             <ul>
               <li>
@@ -44,12 +46,10 @@ function Footer(props) {
                 <NavLink to="/publisher-signup" className="inline-block text-base text-body-color hover:text-primary leading-loose mb-2">Sign-Up</NavLink>
               </li>
             </ul>
-          </div>
-        </div>
+          </Grid>
 
-        {/* column-3 */}
-        <div className="sm:w-1/2 lg:w-3/12 px-2">
-          <div className="w-full mb-10">
+          <Grid item xs={2}>
+            {/* column-3 */}
             <h4 className="text-dark text-lg font-semibold mb-9">Follow Us On</h4>
             <div className="flex items-center mb-6">
               <NavLink
@@ -137,12 +137,7 @@ function Footer(props) {
                      xl:mr-4
                      "
               >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  className="fill-current"
-                >
+                <svg width="14" height="14" viewBox="0 0 14 14" className="fill-current">
                   <path
                     d="M13.0214 0H1.02084C0.453707 0 0 0.451613 0 1.01613V12.9839C0 13.5258 0.453707 14 1.02084 14H12.976C13.5432 14 13.9969 13.5484 13.9969 12.9839V0.993548C14.0422 0.451613 13.5885 0 13.0214 0ZM4.15142 11.9H2.08705V5.23871H4.15142V11.9ZM3.10789 4.3129C2.42733 4.3129 1.90557 3.77097 1.90557 3.11613C1.90557 2.46129 2.45002 1.91935 3.10789 1.91935C3.76577 1.91935 4.31022 2.46129 4.31022 3.11613C4.31022 3.77097 3.81114 4.3129 3.10789 4.3129ZM11.9779 11.9H9.9135V8.67097C9.9135 7.90323 9.89082 6.8871 8.82461 6.8871C7.73571 6.8871 7.57691 7.74516 7.57691 8.60323V11.9H5.51254V5.23871H7.53154V6.16452H7.55423C7.84914 5.62258 8.50701 5.08065 9.52785 5.08065C11.6376 5.08065 12.0232 6.43548 12.0232 8.2871V11.9H11.9779Z"
                   />
@@ -150,67 +145,67 @@ function Footer(props) {
               </NavLink>
             </div>
             <p className="text-base text-body-color">&copy; 2022 V2L</p>
+          </Grid>
+
+          {/* background */}
+          <div>
+            <span className="absolute left-0 bottom-0 z-[-1]">
+              <svg
+                width="217"
+                height="229"
+                viewBox="0 0 217 229"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M-64 140.5C-64 62.904 -1.096 1.90666e-05 76.5 1.22829e-05C154.096 5.49924e-06 217 62.904 217 140.5C217 218.096 154.096 281 76.5 281C-1.09598 281 -64 218.096 -64 140.5Z"
+                  fill="url(#paint0_linear_1179_5)"
+                />
+                <defs>
+                  <linearGradient
+                    id="paint0_linear_1179_5"
+                    x1="76.5"
+                    y1="281"
+                    x2="76.5"
+                    y2="1.22829e-05"
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop stopColor="#3056D3" stopOpacity="0.08" />
+                    <stop offset="1" stopColor="#C4C4C4" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
+            <span className="absolute top-10 right-10 z-[-1]">
+              <svg
+                width="75"
+                height="75"
+                viewBox="0 0 75 75"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M37.5 -1.63918e-06C58.2107 -2.54447e-06 75 16.7893 75 37.5C75 58.2107 58.2107 75 37.5 75C16.7893 75 -7.33885e-07 58.2107 -1.63918e-06 37.5C-2.54447e-06 16.7893 16.7893 -7.33885e-07 37.5 -1.63918e-06Z"
+                  fill="url(#paint0_linear_1179_4)"
+                />
+                <defs>
+                  <linearGradient
+                    id="paint0_linear_1179_4"
+                    x1="-1.63917e-06"
+                    y1="37.5"
+                    x2="75"
+                    y2="37.5"
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop stopColor="#13C296" stopOpacity="0.31" />
+                    <stop offset="1" stopColor="#C4C4C4" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </span>
           </div>
-        </div>
-      </div>
-      <div>
-        <span className="absolute left-0 bottom-0 z-[-1]">
-          <svg
-            width="217"
-            height="229"
-            viewBox="0 0 217 229"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M-64 140.5C-64 62.904 -1.096 1.90666e-05 76.5 1.22829e-05C154.096 5.49924e-06 217 62.904 217 140.5C217 218.096 154.096 281 76.5 281C-1.09598 281 -64 218.096 -64 140.5Z"
-              fill="url(#paint0_linear_1179_5)"
-            />
-            <defs>
-              <linearGradient
-                id="paint0_linear_1179_5"
-                x1="76.5"
-                y1="281"
-                x2="76.5"
-                y2="1.22829e-05"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="#3056D3" stopOpacity="0.08" />
-                <stop offset="1" stopColor="#C4C4C4" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </span>
-        <span className="absolute top-10 right-10 z-[-1]">
-          <svg
-            width="75"
-            height="75"
-            viewBox="0 0 75 75"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M37.5 -1.63918e-06C58.2107 -2.54447e-06 75 16.7893 75 37.5C75 58.2107 58.2107 75 37.5 75C16.7893 75 -7.33885e-07 58.2107 -1.63918e-06 37.5C-2.54447e-06 16.7893 16.7893 -7.33885e-07 37.5 -1.63918e-06Z"
-              fill="url(#paint0_linear_1179_4)"
-            />
-            <defs>
-              <linearGradient
-                id="paint0_linear_1179_4"
-                x1="-1.63917e-06"
-                y1="37.5"
-                x2="75"
-                y2="37.5"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="#13C296" stopOpacity="0.31" />
-                <stop offset="1" stopColor="#C4C4C4" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </span>
-      </div>
-    </footer>
+        </Grid>
+      </footer>
+    </Box>
   );
 }
-
-export default Footer;

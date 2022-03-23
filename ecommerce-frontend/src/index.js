@@ -2,8 +2,6 @@ import React from "react"
 import ReactDOM from "react-dom"
 import App from "./App"
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import DashboardMain from './publisher/components/DashboardMain'
-import UpdateProfile from './publisher/components/UpdateProfile'
 import PublisherPrivateRoutes from './publisher/routes/PublisherPrivateRoutes'
 import CustomerPrivateRoutes from './customer/routes/CustomerPrivateRoutes'
 import Product from './main/components/Product'
@@ -38,7 +36,6 @@ ReactDOM.render(
       <Route path='product'>
         <Route path=":productId" element={<Product rooturl={APIROOTURL} />} />
       </Route>
-      <Route path='update-profile' element={<UpdateProfile />} />
     </Routes>
   </BrowserRouter>,
   document.getElementById("root")

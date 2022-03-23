@@ -14,9 +14,6 @@ export default function Feedbacks() {
   let [feedbacks, setFeedbacks] = React.useState([])
   React.useEffect(() => {
     async function getFeedbacks() {
-      /**
-       * 
-       */
       let response = await fetch('http://127.0.0.1:8000/api/publisher/feedback/list-all/', {
         method: 'GET',
         headers: {

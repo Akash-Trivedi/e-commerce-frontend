@@ -29,31 +29,32 @@ export default function NewProduct() {
     }
 
   ]
-  const [product, updateProduct] = React.useState({
-      name: '',
-      companyName: '',
-      description: '',
-      stock: '0',
-      price: '0',
+  let [product, updateProduct] = React.useState(
+    {
+      name: 'Seagate 1TB HDD, Black 2year warranty',
+      companyName: 'Seagate US',
+      description: 'Seagate 1TB HDD, Black 2 Year warranty Model SEDAFLKLN234N2',
+      stock: '10',
+      price: '5550',
       size: '-',
-      color: '',
-      discount: '0',
-      edition: '-',
+      color: 'BALCK',
+      discount: '7',
+      edition: 'basic',
       shopName: ''
     }
   )
   function registerProduct(event) {
     event.preventDefault();
+
     async function updateProduct(data) {
-      let response = await fetch(`http://localhost:8000/api/publisher/product/add/`,
-        {
-          method: 'POST',
-          body: JSON.stringify(data),
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        })
+      let response = await fetch(`http://localhost:8000/api/publisher/product/add/`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
       response = await response.json();
       return response;
     }
@@ -80,42 +81,27 @@ export default function NewProduct() {
   }
 
   return (
-    <Box sx={{ p: 4, justifyContent: 'center', display: 'flex' }}>
+    <Box sx={{ py: 4, px:6, justifyContent: 'center', display: 'flex' }}>
       <form onSubmit={registerProduct}>
         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
 
           {/* single row */}
-          <Grid item xs={8}>
-            <TextField fullWidth margin='normal' disabled type="text" name='shopName' label="add to this shop" value={product.shopName} />
+          <Grid item xs={12}>
+            <TextField fullWidth margin='normal' disabled type="text" name='shopName' label="add to this shop name" value={product.shopName} />
           </Grid>
 
-          <Grid item xs={4}>
-            <FormControl fullWidth required margin='normal' >
-              <InputLabel>shop</InputLabel>
-              <Select name='shopId' label="shop" onChange={handleChange} required variant='outlined'>
-                {
-                  shops.map(shop => {
-                    return <MenuItem value={shop.shopName} onChange={handleChange}>{shop.shopName}</MenuItem>
-                  })
-                }
-              </Select>
-            </FormControl>
-          </Grid>
-
-          {/* row 2 */}
+          {/* second row */}
           <Grid item xs={3}>
-            <TextField fullWidth margin='normal' onChange={handleChange} type="text" name='companyName' label="Company Name" value={product.companyName} required />
+            <TextField fullWidth margin='normal' disabled type="text" name='companyName' label="Company Name" value={product.companyName} required />
           </Grid>
 
           <Grid item xs={3}>
-            <TextField fullWidth margin='normal' onChange={handleChange} type="text" name='name' label="Product Name" value={product.name} required />
+            <TextField fullWidth margin='normal' disabled type="text" name='name' label="Product Name" value={product.name} required />
           </Grid>
 
           <Grid item xs={6}>
-            <TextField fullWidth margin='normal' label='description' onChange={handleChange} type="text" name='description' value={product.description} required />
+            <TextField fullWidth label='description' disabled type="text" name='description' value={product.description} required margin='normal'/>
           </Grid>
-
-
 
           {/* third row */}
           <Grid item xs={2}>

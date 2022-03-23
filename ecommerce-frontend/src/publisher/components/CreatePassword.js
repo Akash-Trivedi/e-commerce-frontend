@@ -43,7 +43,9 @@ export default function CreatePassword(props) {
 
     let token = sendUserData(userFinalData);
     token.then(token => {
-      console.log(token)
+      localStorage.setItem('access', token.token.access)
+      localStorage.setItem('refresh', token.token.refresh)
+      navigate('/publisher-dashboard')
     })
     token.catch(err => console.log(err))
   }
@@ -58,7 +60,7 @@ export default function CreatePassword(props) {
     let a = document.getElementById('password-match');
 
     if (document.getElementById("password2").value.length !== 0) {
-      if (data.password1.localeCompare(data.password2) == 0) {
+      if (data.password1.localeCompare(data.password2) === 0) {
         document.getElementById("confirm-otp").disabled = false;
         document.getElementById("signup").addEventListener("click", signUp);
         a.style.display = 'none';

@@ -14,10 +14,7 @@ export default function Feedbacks() {
   let [feedbacks, setFeedbacks] = React.useState([])
   React.useEffect(() => {
     async function getFeedbacks() {
-      /**
-       * 
-       */
-      let response = await fetch('http://127.0.0.1:8000/api/publisher/feedback/list-all/', {
+      let response = await fetch('http://127.0.0.1:8000/api/customer/feedback/list-all/', {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -28,7 +25,9 @@ export default function Feedbacks() {
       return response
     }
     let f = getFeedbacks()
-    f.then(res => setFeedbacks(res))
+    f.then(res => {
+      setFeedbacks(res.payload)}
+      )
     f.catch(err => console.log('error encountered'))
   }, [])
 

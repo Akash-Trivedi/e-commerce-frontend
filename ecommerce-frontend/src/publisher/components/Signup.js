@@ -46,15 +46,7 @@ export default function Signup() {
   }
 
   function sendOtp(event) {
-    /**
-     * call the otp service and then update the state of the application
-     */
-
     async function getOtp(contactNumber) {
-      /**
-       * send the request for the otp, to specified contact number
-       * response contains either otp or user already exists
-       */
       let response = await fetch(`http://127.0.0.1:8000/api/otp/${contactNumber}/`)
       response = await response.json()
       return response
@@ -64,7 +56,7 @@ export default function Signup() {
     response.then(response => {
       console.log(response);
       if (response.status === 409) {
-        alert('conflict')
+        alert('user already exists')
       } else {
         updateForm(prev => {
           if (response.status === 200) {

@@ -65,8 +65,8 @@ export default function NewShop(props) {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         }
       })
       response = await response.json();
@@ -74,7 +74,7 @@ export default function NewShop(props) {
     }
     let status = updateDetails(shopData)
       .then((status) => console.log(status))
-      .catch((error) => console.error("error is: " + error));
+      .catch((error) => console.error('error is: ' + error));
   }
 
   function handleChange(event) {
@@ -93,7 +93,7 @@ export default function NewShop(props) {
   return (
     <Box sx={{ p: 4, display: 'flex', justifyContent: 'center' }}>
       <form onSubmit={registerShop} className='capitalize w-1/2'>
-        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
+        <Grid container direction='row' justifyContent='center' alignItems='center' spacing={2}>
           {/* row 2 */}
           <Grid item xs={12}>
             <TextField label='shop name' onChange={handleChange} type='text' value={shopData.name} name='name' fullWidth />

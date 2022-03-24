@@ -5,7 +5,7 @@
  * caller-function: ecommerce-frontend\src\index.js
  */
 import React from 'react'
-import { Route, Navigate, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 import NewProduct from "../components/NewProduct"
 import NewShop from "../components/NewShop"
@@ -20,16 +20,15 @@ import Statistics from '../components/Statistics'
 import OrderHistory from '../components/OrderHistory'
 import Feedbacks from '../components/Feedbacks'
 
-import Signup from '../components/Signup';
-import Login from '../../utility/components/Login';
+
 
 export default function PublisherPrivateRoutes() {
+  
   let [publisherActive, updatePublisherState] = React.useState(true)
-  let publisherData = null;
 
   return (
     <Routes>
-      <Route path='/publisher-dashboard/' element={<Dashboard active={publisherActive} />}>
+      <Route path='publisher-dashboard/' element={<Dashboard active={publisherActive} />}>
         <Route path={'profile'} element={<Profile />} />
         <Route path='shops' element={<Shops />} />
         <Route path='products' element={<Products />} />
@@ -42,8 +41,6 @@ export default function PublisherPrivateRoutes() {
         <Route path='orders' element={<OrderHistory />} />
         <Route path="*" element={<NotFound />} />
       </Route>
-      <Route path='publisher-signup' element={<Signup />} />
-      <Route path='publisher-login' element={<Login active={updatePublisherState} />} />
     </Routes>
   )
 }

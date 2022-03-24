@@ -10,66 +10,18 @@ import React from "react";
 
 // custom components
 import Header from "./main/components/Header";
-import Main from "./main/components/Main";
 import Footer from "./main/components/Footer";
-
+import TagMenu from "./main/components/TagMenu";
+import { Outlet } from "react-router-dom";
 
 function App(props) {
-  /**
-   * render homepage
-   */
-  const [dataDictionary, updateDataDictionary] = React.useState({
-    "tags": [],
-    "products": []
-  });
-
-  const WEBSITETITLE = props.title;
-
-  function setProducts(jsonArray) {
-    updateDataDictionary((prev) => { return { ...prev, "products": jsonArray } });
-  }
-
-  function setTags(jsonArray) {
-    updateDataDictionary((prev) => { return { ...prev, "tags": jsonArray } });
-  }
-
-  React.useEffect(() => {
-    async function getProducts(pincode) {
-      let response = await fetch(`${props.rooturl}product/list-all/${pincode}/`, {
-        method: "GET",
-        "Content-Type": "application/json"
-      });
-      response = await response.json();
-      return response;
-    }
-    async function getTags() {
-      let response = await fetch(`${props.rooturl}product/tags/list-all/`,
-        {
-          method: "GET",
-          "Content-Type": "application/json"
-        });
-      response = response.json();
-      return response;
-    }
-    let tags = getTags()
-      .then(res => setTags(res))
-      .catch(
-        (error) => {
-          console.log("error encountered in tags was: ", error);
-        })
-    let products = getProducts(208012)
-      .then(res => setProducts(res))
-      .catch(
-        (error) => {
-          console.log("error encountered in products was: ", error);
-        })
-  }, []);
 
   return (
     <>
-      <Header title={WEBSITETITLE} />
-      <Main productList={dataDictionary.products} tagList={dataDictionary.tags} />
-      <Footer tagList={dataDictionary.tags} />
+      <Header title={'V2L'} />
+      <TagMenu />
+      <Outlet />
+      <Footer />
     </>
   );
 }

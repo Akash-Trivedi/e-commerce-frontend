@@ -23,7 +23,7 @@ export default function NotFound() {
                 <p className="text-lg text-white mb-8">
                   The page you are looking for it maybe deleted or does not even exists yet!
                 </p>
-                <Link className="text-base font-semibold text-white inline-block text-center border border-white rounded-lg px-8 py-3 hover:bg-white hover:text-primary transition" to='/'>
+                <Link className="text-base font-semibold text-white inline-block text-center border border-white rounded-lg px-8 py-3 hover:bg-white hover:text-primary transition" to='/homepage'>
                   Go To Home
                 </Link>
               </div>

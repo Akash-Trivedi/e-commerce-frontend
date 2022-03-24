@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import Header from './Header';
 
 
 function Star(props) {
@@ -34,7 +33,6 @@ function StarArray(props) {
 }
 
 export default function Product(props) {
-
   let [product, setProduct] = React.useState({});
   let { productId } = useParams();
   const newPrice = product.price - (product.price * (product.discount / 100))
@@ -49,16 +47,16 @@ export default function Product(props) {
       return response;
     }
     let product = getProduct(productId)
-      .then(res => setProduct(res))
-      .catch(
-        (error) => {
-          console.log("error encountered in tags was: ", error);
-        })
+    product.then(res => setProduct(res))
+    product.catch(
+      (error) => {
+        console.log("error encountered in tags was: ", error);
+      })
+    //   no-lone-blocks
   }, []);
 
   return (
     <div>
-      {<Header />}
       <section className="text-gray-600 body-font overflow-hidden">
         <div className="container px-12 py-5 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">

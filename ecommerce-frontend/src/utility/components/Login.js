@@ -6,72 +6,134 @@
  */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
-  Grid, Button, TextField, Box
+  Grid, Button, TextField, Box, FormControlLabel, Checkbox
 } from '@mui/material';
-
-
-const APIROOTURL = 'http://127.0.0.1:8000/ecommerce/';
 
 /**
  * generalized login page, can be used for both publisher and customer
  */
+function login(data) {
+  async function loginInside(data) {
+    let response = await fetch('http://127.0.0.1:8000/api/publisher/login/', {
+      body: JSON.stringify(data),
+      method: 'POST',
+      headers: {
+        'Authorization': `JWT ${localStorage.getItem('access')}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    response = await response.json()
+    return response
+  }
+  let r = loginInside(data)
+  return r
+}
+
+
+function refresh(data) {
+  async function refreshIndside(data) {
+    let response = await fetch('http://127.0.0.1:8000/api/token/', {
+      body: JSON.stringify(data),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    response = await response.json()
+    return response
+  }
+  let a = refreshIndside(data)
+  return a
+}
+
 
 export default function Login(props) {
-  let formData = { contact: "", password: "" };
+  let [formData, updateFormData] = React.useState({
+    username: '', password: ''
+  });
 
-  function updateFormData(event) {
-    formData = {
-      ...formData, [event.target.id]: event.target.value
+  function handleChange(event) {
+    updateFormData(prev => {
+      return {
+        ...prev, [event.target.name]: event.target.value
+      }
+    })
+  }
+
+  function userLogin(event) {
+    event.preventDefault();
+    console.log(formData);
+    if (localStorage.getItem('access') === null || localStorage.getItem('access') === undefined) {
+      let newtoken = refresh(formData)// returns promise
+      newtoken.then(r => {
+        console.log('refresh token setted');
+        localStorage.setItem('access', r.access);
+        localStorage.setItem('refresh', r.refresh);
+      })
+      newtoken.then(
+        r => {
+          let res = login(formData)
+          res.then(res => {
+            console.log(res)
+          })
+          res.catch(error => console.log(`error was : ${error}`))
+        }
+      )
+    } else {
+      let res = login(formData)
+      res.then(res => {
+        console.log(res);
+      })
+      res.catch(error => console.log(`error was : ${error}`))
     }
   }
-  function publisherLogin(event) {
-    event.preventDefault();
-    let response = fetch(`${APIROOTURL}`)
-  }
+
 
   function showContent(event) {
-    /**
-     * every call updates the input type: text/password
-     * sets the type of primary input to both inputs
-     */
-    var inputPassword = document.getElementById("password");
-    (inputPassword.type === 'password' ? inputPassword.type = 'text' : inputPassword.type = 'password')
+    let inputPassword = document.getElementById("password");
+    inputPassword.type.localeCompare('password') === 0 ? inputPassword.type = 'text' : inputPassword.type = 'password'
   }
 
   return (
     <Box sx={{ p: 4, display: 'flex', justifyContent: 'center' }}>
-      <form onSubmit={publisherLogin} className="mt-6">
+      <form onSubmit={userLogin} className="w-1/2">
         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
-          <h1>Customer Login</h1>
-          <Grid item xs={12}>
-            <TextField label='shop name' onChange={updateFormData} type='text' value={1} name='name' fullWidth />
+
+          <Grid item xs={7}>
+            <Box sx={{ py: 2, display: 'flex', justifyContent: 'center' }}>
+              <h1 className='capitalize text-2xl font-semibold'>{props.variables.heading} Login</h1>
+            </Box>
           </Grid>
-          <div className="my-5 text-sm">
-            <label htmlFor="contact" className="block text-black">Contact</label>
-            <input type="text" autoFocus id="contact" className="rounded-sm px-4 py-3 mt-3 focus:outline-none bg-gray-100 w-full" placeholder="+91" onChange={updateFormData} />
-          </div>
-          <div className="my-5 text-sm">
-            <label htmlFor="password" className="block text-black">Password</label>
-            <input type="password" id="password" className="rounded-sm px-4 py-3 mt-3 focus:outline-none bg-gray-100 w-full" placeholder="Password" onChange={updateFormData} />
-            <div className="flex justify-end mt-2 text-xs text-gray-600">
-              <a href="../../pages/auth/forget_password.html hover:text-black">Forget Password?</a>
-            </div>
 
-          </div>
-          {/* show password */}
-          <div className="my-5 text-sm">
-            <input type="checkbox" onClick={showContent} id="showPassword" />
-            <label htmlFor="showPassword" className="mt-1 text-xs text-gray-900">show password</label>
-          </div>
+          <Grid item xs={7}>
+            <TextField label='contact' onChange={handleChange} type='text' value={formData.contact} name='username' fullWidth />
+          </Grid>
 
-          <button className="block text-center text-white bg-gray-800 p-3 duration-300 rounded-sm hover:bg-black w-full">Login</button>
+          <Grid item xs={7}>
+            <TextField label='password' onChange={handleChange} type='password' value={formData.password} name='password' fullWidth id='password' />
+          </Grid>
 
-          <p className="mt-12 text-xs text-center font-light text-gray-800">
-            Don't have an account?
-            <Link to="publisher/registration"> Create One </Link>
-          </p>
+          <Grid item xs={7}>
+            <FormControlLabel id="showPassword" control={<Checkbox />} onChange={showContent} label="show password" />
+          </Grid>
+
+          <Grid item xs={7}>
+            <Box display='flex' justifyContent='center'>
+              <Button variant='contained' type='submit'>Login</Button>
+            </Box>
+          </Grid>
+
+          <Grid item xs={7}>
+            <Box sx={{ py: 2, display: 'flex', justifyContent: 'center' }}>
+              Don't have an account?
+              {
+                props.variables.type.localeCompare('customer') === 0 ? <NavLink to='/customer-signup'> Login! </NavLink> : <NavLink to='/publisher-signup'> Signup! </NavLink>
+              }
+            </Box>
+          </Grid>
+
         </Grid >
       </form >
     </Box >

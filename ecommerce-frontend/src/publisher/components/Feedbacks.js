@@ -4,40 +4,24 @@
  * functionality: render the feedbacks of the users related to publishers products
  * caller-function: ecommerce-frontend\src\publisher\components\Dashboard.js
  */
-import React from 'react'
+import React, { useContext } from 'react'
 import {
   Rating
 } from '@mui/material'
-
+import ApplicationContext from '../../main/context/ApplicationContext'
 
 export default function Feedbacks() {
-  let [feedbacks, setFeedbacks] = React.useState([])
-  React.useEffect(() => {
-    async function getFeedbacks() {
-      let response = await fetch('http://127.0.0.1:8000/api/publisher/feedback/list-all/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      response = await response.json()
-      return response
-    }
-    let f = getFeedbacks()
-    f.then(res => setFeedbacks(res))
-    f.catch(err => console.log('error encountered'))
-  }, [])
-
+  const stateObject = useContext(ApplicationContext)
+  const feedbacks = stateObject.appData.feedbacks
   return (
     <section className="pb-6 lg:pb-10 bg-[#F3F4F6]">
       <div className="container">
         <div className="flex flex-wrap -mx-4">
-          {/* single feedback block */}
           {
-            feedbacks.map(f => {
-              return <FeedbackBlock data={f} key={f.feedbackId} />
-            })
+            feedbacks.length === 0 ? true :
+              (feedbacks.map(f => {
+                return <FeedbackBlock data={f} key={f.feedbackId} />
+              }))
           }
         </div>
       </div>

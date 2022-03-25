@@ -8,9 +8,12 @@ import React from 'react';
 import {
   Grid, TextField, Box, Button, fullWidth
 } from '@mui/material'
+import { useContext } from 'react';
+import ApplicationContext from '../../main/context/ApplicationContext';
 
 
-export default function NewShop(props) {
+export default function NewShop() {
+  const stateObject = useContext(ApplicationContext)
   let [shopData, updateShop] = React.useState({
     name: '',
     pincode: '',
@@ -65,6 +68,7 @@ export default function NewShop(props) {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
+          'Authorization': `JWT ${localStorage.getItem('access')}`,
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         }
@@ -72,9 +76,25 @@ export default function NewShop(props) {
       response = await response.json();
       return response;
     }
-    let status = updateDetails(shopData)
-      .then((status) => console.log(status))
-      .catch((error) => console.error('error is: ' + error));
+    let promise = updateDetails(shopData)
+    promise.then(
+      res => {
+        if (res.status === 201) {
+          alert('new shop added!')
+          stateObject.updateAppData(
+            prev => {
+              return {
+                ...prev,
+                shops: res.shops
+              }
+            }
+          )
+        } else {
+          alert('some error occured in server side')
+        }
+      }
+    )
+    promise.catch((error) => console.error('error is: ' + error));
   }
 
   function handleChange(event) {
@@ -116,7 +136,7 @@ export default function NewShop(props) {
           <Grid item xs={12}>
             <TextField label='address' onChange={handleChange} type='text' value={shopData.address} name='address' multiline maxRows={4} fullWidth />
           </Grid>
-          <Box sx={{py:2, display: 'flex', justify:'center'}}>
+          <Box sx={{ py: 2, display: 'flex', justify: 'center' }}>
             <Grid item xs={12}>
               <Button variant='contained' color='primary' type='submit' >add</Button>
             </Grid>

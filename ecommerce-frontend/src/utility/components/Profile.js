@@ -5,20 +5,21 @@
  * caller-function: ecommerce-frontend\src\publisher\routes\PublisherPrivateRoutes.js
  */
 import React from 'react'
-import { useLocation } from 'react-router-dom';
+import { useContext } from 'react'
 import {
   Grid, TextField, Avatar
 } from '@mui/material'
 import { grey } from '@mui/material/colors'
+import ApplicationContext from '../../main/context/ApplicationContext'
 
 
 export default function Profile() {
-
+  const stateObject = useContext(ApplicationContext)
   const avatarSize = 250;
-  const location = useLocation();
-  let formData = location.state.publisherInfo;
+  let formData = stateObject.appData.allInfo;
+  console.log(formData);
+
   let address = `${formData.address}, ${formData.pincode}, ${formData.city}, ${formData.state}`
-  address = `108/87, p road, kanpur, 208012, kanpur nagar, uttar pradesh`
   return (
     <Grid container spacing={2}>
       <Grid item xs={5} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>

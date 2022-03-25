@@ -5,12 +5,11 @@
  * caller-function: ecommerce-frontend\src\publisher\components\Dashboard.js
  */
 import React, { useContext } from 'react'
-import { useLocation } from 'react-router-dom'
 import {
   Box,
   Grid
 } from '@mui/material'
-import { Grid3x3 } from '@mui/icons-material'
+import ApplicationContext from '../../main/context/ApplicationContext'
 
 function ShopBlock(props) {
   const { name, pincode, address, registrationDate, city, state, sales, productCount } = props.data
@@ -43,43 +42,8 @@ function ShopBlock(props) {
 
 
 export default function Shops() {
-  const location = useLocation();
-  const shops1 = location.state.shops;
-  const shops = [
-    {
-      shopId: 1,
-      name: 'prabhu eyecare',
-      pincode: '208012',
-      address: '108/87 p road, kanpur',
-      registrationDate: '17-03-2022',
-      city: 'kanpur',
-      state: 'uttarpradesh',
-      sales: 5600,
-      productCount: 0
-    },
-    {
-      shopId: 2,
-      name: 'prabhu eyecare',
-      pincode: '208012',
-      address: 'p road, kanpur',
-      registrationDate: '17-03-2022',
-      city: 'kanpur',
-      state: 'uttarpradesh',
-      sales: 5600,
-      productCount: 0
-    },
-    {
-      shopId: 3,
-      name: 'prabhu eyecare',
-      pincode: '208012',
-      address: 'p road, kanpur',
-      registrationDate: '17-03-2022',
-      city: 'kanpur',
-      state: 'uttarpradesh',
-      sales: 5600,
-      productCount: 0
-    }
-  ]
+  const stateObject = useContext(ApplicationContext)
+  const shops = stateObject.appData.shops
   return (
     <Box sx={{ p: 2 }}>
       <Grid container rowGap={1} columnGap={1} direction="row" justifyContent="center" alignItems="center" >

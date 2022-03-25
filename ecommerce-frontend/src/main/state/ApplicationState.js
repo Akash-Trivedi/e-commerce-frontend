@@ -15,11 +15,11 @@ export default function ApplicationState(props) {
     },
     userLoggedIn: 0,
     userType: 0,
-    userInfo: {
-      allInfo: {},
-      shops: [],
-      products: []
-    }
+    totalSales: 0,
+    shops: [],
+    allInfo: {},
+    products: [],
+    feedbacks: []
   });
 
   function setProducts(jsonArray) {

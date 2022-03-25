@@ -5,17 +5,15 @@
  * caller function: ecommerce-frontend/src/index.js
  */
 
-import "./App.css";
-import React from "react";
+import './App.css';
+import React from 'react';
 
-// custom components
-import Header from "./main/components/Header";
-import Footer from "./main/components/Footer";
-import TagMenu from "./main/components/TagMenu";
-import { Outlet } from "react-router-dom";
+import Header from './main/components/Header';
+import Footer from './main/components/Footer';
+import TagMenu from './main/components/TagMenu';
+import { Outlet } from 'react-router-dom';
 
-function App(props) {
-
+function App() {
   return (
     <>
       <Header title={'V2L'} />

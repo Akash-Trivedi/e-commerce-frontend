@@ -4,6 +4,7 @@
  * functionality: creates new routes for the specified url starting with 'publisher'
  * caller-function: ecommerce-frontend\src\index.js
  */
+
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
@@ -23,13 +24,10 @@ import Feedbacks from '../components/Feedbacks'
 
 
 export default function PublisherPrivateRoutes() {
-  
-  let [publisherActive, updatePublisherState] = React.useState(true)
-
   return (
     <Routes>
-      <Route path='publisher-dashboard/' element={<Dashboard active={publisherActive} />}>
-        <Route path={'profile'} element={<Profile />} />
+      <Route path='publisher-dashboard/' element={<Dashboard />}>
+        <Route path='profile' element={<Profile />} />
         <Route path='shops' element={<Shops />} />
         <Route path='products' element={<Products />} />
         <Route path='new-product' element={<NewProduct />} />
@@ -39,7 +37,6 @@ export default function PublisherPrivateRoutes() {
         <Route path='sales-report' element={<Statistics />} />
         <Route path='update-profile' element={<UpdateProfile link={'http://localhost:8000/api/customer/publisher-update-profile/'} />} />
         <Route path='orders' element={<OrderHistory />} />
-        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   )

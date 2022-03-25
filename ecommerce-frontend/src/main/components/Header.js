@@ -8,13 +8,13 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ShoppingCartRounded } from '@material-ui/icons'
-import mainContext from '../context/mainContext';
+import ApplicationContext from '../context/ApplicationContext';
 import {
-  Button
+  Button, Avatar
 } from '@mui/material';
 
-function Header() {
-  const a = useContext(mainContext)
+export default function Header() {
+  const stateObject = useContext(ApplicationContext);
   return (
     <header className='text-white body-font'>
       <nav className='navbar navbar-expand-lg navbar-light bg-black'>
@@ -24,18 +24,20 @@ function Header() {
           <div className='collapse navbar-collapse' id='navbarSupportedContent'>
             <form className='inline-flex container-fluid px-24'>
               <input className='form-control px-5' type='search' placeholder='Search' aria-label='Search' />
-              <Button type='submit' color='primary' variant='contained' sx={{ml: 1}}>Search</Button>
+              <Button type='submit' color='primary' variant='contained' sx={{ ml: 1 }}>Search</Button>
             </form>
           </div>
           {
-            a.userLoggedIn !== true ?
+            localStorage.getItem('userLoggedIn').localeCompare('0') === 0 ?
               (<>
                 <NavLink to='/customer-login' className='py-2 px-2 lg:px-2 xl:px-2 inline-flex items-center justify-center text-center text-white text-base hover:bg-opacity-90 font-normal'>Login</NavLink>
                 <NavLink to='/customer-signup' className='py-1 px-2 lg:px-2 xl:px-2 inline-flex items-center justify-center text-center text-white text-base bg-primary hover:bg-opacity-90 font-normal rounded-lg'> Sign-up </NavLink>
               </>
               ) :
               (
-                <></>
+                <>
+                  <NavLink to={localStorage.getItem('userType').localeCompare('0') === 0 ? '/customer-dashboard' : '/publisher-dashboard'}><Avatar /></NavLink>
+                </>
               )
           }
           <NavLink to='/cart' className='py-1 px-2 lg:px-2 xl:px-2 inline-flex items-center justify-center text-center text-white text-base hover:bg-opacity-90 font-normal rounded-lg'>
@@ -46,5 +48,3 @@ function Header() {
     </header>
   )
 }
-
-export default Header;

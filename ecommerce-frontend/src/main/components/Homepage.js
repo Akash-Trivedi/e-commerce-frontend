@@ -7,18 +7,18 @@
 
 import React, { useContext } from "react";
 import ProductPreview from "./ProductPreview";
-import mainContext from "../context/mainContext";
+import ApplicationContext from "../context/ApplicationContext";
 
-function Main() {
-  const products = useContext(mainContext)
-  let [currentPage, setCurrentPage] = React.useState({})
+export default function Homepage() {
+  const stateObject = useContext(ApplicationContext)
+  let [currentPage, setCurrentPage] = React.useState(0)
   console.log('main component rendered');
   return (
     <section className="text-gray-600 body-font">
       <div className="container px-2">
         <div className="flex flex-wrap">
           {
-            products.products.map((product) => {
+            stateObject.appData.products.map((product) => {
               return < ProductPreview product={product} key={product.id} />
             })
           }
@@ -27,5 +27,3 @@ function Main() {
     </section>
   );
 }
-
-export default Main;

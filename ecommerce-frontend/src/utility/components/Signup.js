@@ -6,18 +6,14 @@
  */
 
 import React from 'react';
-// import { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   Grid, Button, TextField, Box, FormControlLabel, Checkbox
 } from '@mui/material';
-// import mainContext from '../../main/context/mainContext';
 
 
 
 export default function Signup(props) {
-  // let mainContext1 = useContext(mainContext)
-  // console.log(mainContext1);
   let navigate = useNavigate();
   let [formData, updateForm] = React.useState({
     username: '',
@@ -27,7 +23,6 @@ export default function Signup(props) {
   });
 
   function checkUsername(username) {
-    // let contactRegex = '^[6-9]{1}[0-9]{9}';
     if (username.length === 10) {
       return true
     }
@@ -73,7 +68,6 @@ export default function Signup(props) {
   }
 
   function verifyOtp(event) {
-    // let otp = '^[1-9]{1}[0-9]{5}';
     if (document.getElementById('otp').value.localeCompare(formData.otp) !== 0) {
       alert('wrong otp')
     } else {
@@ -187,7 +181,7 @@ export default function Signup(props) {
                     <Box sx={{ py: 2, display: 'flex', justifyContent: 'center' }}>
                       Already have an account?
                       {
-                        props.variables.type.localeCompare('customer') === 0 ? <NavLink to='/customer-login'> Login! </NavLink> : <NavLink to='/publisher-login'> Login! </NavLink>
+                        props.variables.userType === 0 ? <NavLink to='/customer-login'> Login! </NavLink> : <NavLink to='/publisher-login'> Login! </NavLink>
                       }
                     </Box>
                   </Grid>

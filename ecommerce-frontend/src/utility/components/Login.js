@@ -6,50 +6,22 @@
  */
 
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   Grid, Button, TextField, Box, FormControlLabel, Checkbox
 } from '@mui/material';
+import { useContext } from 'react'
+import ApplicationContext from '../../main/context/ApplicationContext'
 
 /**
  * generalized login page, can be used for both publisher and customer
  */
-function login(data) {
-  async function loginInside(data) {
-    let response = await fetch('http://127.0.0.1:8000/api/publisher/login/', {
-      body: JSON.stringify(data),
-      method: 'POST',
-      headers: {
-        'Authorization': `JWT ${localStorage.getItem('access')}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    response = await response.json()
-    return response
-  }
-  let r = loginInside(data)
-  return r
-}
-
-
-function refresh(data) {
-  async function refreshIndside(data) {
-    let response = await fetch('http://127.0.0.1:8000/api/token/', {
-      body: JSON.stringify(data),
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    response = await response.json()
-    return response
-  }
-  let a = refreshIndside(data)
-  return a
-}
 
 
 export default function Login(props) {
+  console.log('login component rendered');
+  const navigate = useNavigate()
+  const stateObject = useContext(ApplicationContext)
   let [formData, updateFormData] = React.useState({
     username: '', password: ''
   });
@@ -64,19 +36,36 @@ export default function Login(props) {
 
   function userLogin(event) {
     event.preventDefault();
-    console.log(formData);
     if (localStorage.getItem('access') === null || localStorage.getItem('access') === undefined) {
+      console.log('token was not set');
       let newtoken = refresh(formData)// returns promise
-      newtoken.then(r => {
-        console.log('refresh token setted');
-        localStorage.setItem('access', r.access);
-        localStorage.setItem('refresh', r.refresh);
-      })
+      newtoken.then(
+        r => {
+          console.log('refresh token setted');
+          localStorage.setItem('access', r.access);
+          localStorage.setItem('refresh', r.refresh);
+          localStorage.setItem('userLoggedIn', true);
+          if (props.variables.userType === 0) {
+            localStorage.setItem('userType', 0);
+          } else {
+            localStorage.setItem('userType', 1);
+          }
+          stateObject.updateAppData(
+            prev => {
+              return {
+                ...prev,
+                userType: localStorage.getItem('userType'),
+                userLoggedIn: true
+              }
+            }
+          )
+          console.log(stateObject);
+        })
       newtoken.then(
         r => {
           let res = login(formData)
           res.then(res => {
-            console.log(res)
+            console.log('logged in');
           })
           res.catch(error => console.log(`error was : ${error}`))
         }
@@ -87,6 +76,12 @@ export default function Login(props) {
         console.log(res);
       })
       res.catch(error => console.log(`error was : ${error}`))
+    }
+
+    if (localStorage.getItem('userType').localeCompare('1') === 0) {
+      navigate('/publisher-dashboard')
+    } else {
+      navigate('/homepage')
     }
   }
 
@@ -129,7 +124,7 @@ export default function Login(props) {
             <Box sx={{ py: 2, display: 'flex', justifyContent: 'center' }}>
               Don't have an account?
               {
-                props.variables.type.localeCompare('customer') === 0 ? <NavLink to='/customer-signup'> Login! </NavLink> : <NavLink to='/publisher-signup'> Signup! </NavLink>
+                props.variables.userType === 0 ? <NavLink to='/customer-signup'> Signup! </NavLink> : <NavLink to='/publisher-signup'> Signup! </NavLink>
               }
             </Box>
           </Grid>
@@ -138,4 +133,38 @@ export default function Login(props) {
       </form >
     </Box >
   );
+}
+
+function login(data) {
+  async function loginInside(data) {
+    let response = await fetch('http://127.0.0.1:8000/api/publisher/login/', {
+      body: JSON.stringify(data),
+      method: 'POST',
+      headers: {
+        'Authorization': `JWT ${localStorage.getItem('access')}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    response = await response.json()
+    return response
+  }
+  let r = loginInside(data)
+  return r
+}
+
+
+function refresh(data) {
+  async function refreshIndside(data) {
+    let response = await fetch('http://127.0.0.1:8000/api/token/', {
+      body: JSON.stringify(data),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    response = await response.json()
+    return response
+  }
+  let a = refreshIndside(data)
+  return a
 }

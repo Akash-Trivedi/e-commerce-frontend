@@ -9,10 +9,16 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-do
 import {
   Button, Avatar, Grid, Box
 } from '@mui/material';
+import { useContext } from 'react';
+import ApplicationContext from '../../main/context/ApplicationContext';
 
-export default function Dashboard(props) {
-  const publisherActive = useLocation()
-  console.log(publisherActive);
+
+export default function Dashboard() {
+  const navigate = useNavigate()
+  const stateObject = useContext(ApplicationContext)
+  if (localStorage.getItem('userLoggedIn').localeCompare('0') === 0 || localStorage.getItem('userType').localeCompare('0') === 0) {
+    navigate('/homepage')
+  }
   let totalSales = 0;
   let sideNavContent = {
     name: [
@@ -28,7 +34,7 @@ export default function Dashboard(props) {
       ['update profile', 'update-profile'],
     ]
   }
-  
+
   let [publisherData, updateDashboard] = React.useState({
     shops: [],
     publisherInfo: {},
@@ -50,21 +56,23 @@ export default function Dashboard(props) {
 
   function logout(event) {
     event.preventDefault()
-    async function logout2() {
-      let response = await fetch('http://127.0.0.1:8000/api/publisher/logout/', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
+    localStorage.removeItem('access')
+    localStorage.removeItem('refresh')
+    localStorage.setItem('userLoggedIn', 0)
+    localStorage.setItem('userType', 0)
+    stateObject.updateAppData(
+      prev => {
+        return {
+          ...prev,
+          userLoggedIn: false
         }
-      })
-      response = response.json()
-      return response
-    }
-    let a = logout2()
+      }
+    )
+    navigate('/homepage')
   }
 
   return (
-    <Box sx={{minWidth: 400}}>
+    <Box sx={{ minWidth: 400 }}>
       <Grid container spacing={2} sx={{ pt: 1, pl: 2 }}>
 
         {/* left side */}
@@ -103,7 +111,7 @@ export default function Dashboard(props) {
                     </Grid>
                     <Grid item xs={2}>
                       <form onSubmit={logout}>
-                        <Button color='primary' variant='contained' disableElevation>logout</Button>
+                        <Button color='primary' variant='contained' disableElevation type='submit'>logout</Button>
                       </form>
                     </Grid>
                   </div>

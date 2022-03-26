@@ -15,6 +15,13 @@ import {
 
 export default function Header() {
   const stateObject = useContext(ApplicationContext);
+  if (localStorage.getItem('userLoggedIn') === null || localStorage.getItem('userLoggedIn') === undefined) {
+    localStorage.setItem('userLoggedIn', 0);
+  }
+  if (localStorage.getItem('userType') === null || localStorage.getItem('userType') === undefined) {
+    localStorage.setItem('userType', 0);
+  }
+
   return (
     <header className='text-white body-font'>
       <nav className='navbar navbar-expand-lg navbar-light bg-black'>

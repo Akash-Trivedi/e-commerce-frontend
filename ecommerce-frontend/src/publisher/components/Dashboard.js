@@ -5,7 +5,7 @@
  * caller-function: 
  */
 import React from 'react';
-import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   Button, Avatar, Grid, Box
 } from '@mui/material';
@@ -14,11 +14,14 @@ import ApplicationContext from '../../main/context/ApplicationContext';
 
 
 export default function Dashboard() {
+
   const navigate = useNavigate()
   const stateObject = useContext(ApplicationContext)
+  console.log(stateObject.appData);
   if (localStorage.getItem('userLoggedIn').localeCompare('0') === 0 || localStorage.getItem('userType').localeCompare('0') === 0) {
     navigate('/homepage')
   }
+
   let sideNavContent = {
     name: [
       ['profile', 'profile'],
@@ -35,29 +38,21 @@ export default function Dashboard() {
   }
 
   React.useEffect(() => {
-    fetch(`http://localhost:8000/api/publisher/all-info/`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `JWT ${localStorage.getItem('access')}`,
-        'Content-Type': 'application/json'
+    let promise = getPublisherInfo()
+    promise.then(
+      response => {
+        stateObject.updateAppData(prev => {
+          return {
+            ...prev,
+            userInfo: response.data.userInfo,
+            shops: response.data.shops,
+            publisherProducts: response.data.publisherProducts,
+            totalSales: response.data.totalSales,
+            feedbacks: response.data.feedbacks
+          }
+        })
       }
-    })
-      .then(response => response.json())
-      .then(
-        response => {
-          console.log(response);
-          stateObject.updateAppData(prev => {
-            return {
-              ...prev,
-              userInfo: response.data.publisherInfo,
-              shops: response.data.shops,
-              products: response.data.products,
-              totalSales: response.data.totalSales,
-              feedbacks: response.data.feedbacks
-            }
-          })
-        }
-      )
+    )
       .catch(err => { console.log('some error occured: ' + err) })
   }, [])
 
@@ -114,7 +109,7 @@ export default function Dashboard() {
                       <span>Shops Registered: <span className='text-lime-500 font-semibold'>{stateObject.appData.shops.length}</span></span>
                     </Grid>
                     <Grid item xs={4}>
-                      <span>product registered: <span className='text-lime-500 font-semibold'> &#8377; {stateObject.appData.products.length}</span>&nbsp;&nbsp;</span>
+                      <span>product registered: <span className='text-lime-500 font-semibold'> &#8377; {stateObject.appData.publisherProducts.length}</span>&nbsp;&nbsp;</span>
                     </Grid>
                     <Grid item xs={4}>
                       <span>Overall Sales: <span className='text-lime-500 font-semibold'> &#8377; {stateObject.appData.totalSales}</span>&nbsp;&nbsp;</span>
@@ -134,4 +129,16 @@ export default function Dashboard() {
       </Grid >
     </Box>
   )
+}
+
+async function getPublisherInfo() {
+  let response = await fetch(`http://localhost:8000/api/publisher/all-info/`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `JWT ${localStorage.getItem('access')}`,
+      'Content-Type': 'application/json'
+    }
+  })
+  response = response.json()
+  return response
 }

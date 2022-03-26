@@ -11,6 +11,7 @@ import ApplicationContext from '../context/ApplicationContext';
 
 export default function Homepage() {
   const stateObject = useContext(ApplicationContext)
+  console.log(stateObject);
   let [currentPage, setCurrentPage] = React.useState(0)
   console.log('main component rendered');
   return (

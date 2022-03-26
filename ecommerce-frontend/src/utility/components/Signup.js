@@ -5,16 +5,18 @@
  * caller function: ecommerce-frontend\src\publisher\routes\PublisherPrivateRoutes.js or ecommerce-frontend\src\publisher\routes\CustomerPrivateRoutes.js
  */
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   Grid, Button, TextField, Box, FormControlLabel, Checkbox
 } from '@mui/material';
+import ApplicationContext from '../../main/context/ApplicationContext';
 
 
 
 export default function Signup(props) {
   let navigate = useNavigate();
+  const stateObject = useContext(ApplicationContext)
   let [formData, updateForm] = React.useState({
     username: '',
     password1: '',
@@ -74,8 +76,26 @@ export default function Signup(props) {
       let a = addUserToDatabase();
       a.then(r => {
         if (r.status === 201) {
+          // 201 is created
+          alert('new publisher Added')
+          stateObject.updateAppData(
+            prev => {
+              return {
+                ...prev,
+                userInfo: r.data.userInfo
+              }
+            }
+          )
+          localStorage.setItem('access', r.data.token.access)
+          localStorage.setItem('refresh', r.data.token.refresh)
+          localStorage.setItem('userLoggedIn', 1)
+          localStorage.setItem('userType', props.variables.userType)
           navigate('/')
+        } else if (r.status === 409) {
+          // 409 is conflict
+          alert('user already exists')
         } else {
+          alert('user not added :(, server encountered some error, please try again later')
           navigate('/')
         }
       })

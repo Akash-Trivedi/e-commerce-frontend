@@ -10,7 +10,7 @@ import { NavLink } from 'react-router-dom';
 
 
 export default function ProductPreview(props) {
-  const product = props.product;
+  const product = props.product
   const newPrice = product.price - (product.price * (product.discount / 100))
   return (
     <div className="p-2 grid">

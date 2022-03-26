@@ -4,7 +4,8 @@
  * functionality: render the page for updating the details of the customer
  * caller-function: ecommerce-frontend\src\main\components\Header.js
  */
-import React from 'react'
+import React, { useContext } from 'react'
+import ApplicationContext from '../../main/context/ApplicationContext'
 import {
   Button, TextField, Grid, Avatar, Box
 } from '@mui/material'
@@ -16,71 +17,73 @@ import { grey } from '@mui/material/colors'
 export default function UpdateProfile(props) {
   const avatarSize = 250;
   const link = props.link
+  const stateObject = useContext(ApplicationContext)
+  const u = stateObject.appData.userInfo
   let [formData, updateForm] = React.useState({
-    firstName: '',
-    lastName: '',
-    email: '',
+    first_name: u.first_name,
+    last_name: u.last_name,
+    email: u.email,
     dob: '',
-    address: '',
-    pincode: '',
-    city: '',
-    state: ''
+    address: u.address,
+    pincode: u.pincode,
+    city: u.city,
+    state: u.state
   })
 
   function updateProfile(event) {
-    event.preventDefault()
-    async function updateDetails(data) {
-      let response = await fetch(`http://localhost:8000/api/product/tag/list-all/`)
-      response = await response.json()
-      return response
-    }
-    let status = updateDetails(formData)
-      .catch((error) => console.error('error is: ' + error))
-  }
+    event.preventDefault();
 
-  function getLocation(pincode) {
-
-    async function getLocationInside(pincode) {
-      let response = await fetch(`https://api.postalpincode.in/pincode/${pincode}`, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-        }
-      })
-      response = await response.json()
-      return response
-    }
-
-    let location = getLocationInside(pincode)
-    location.then(l => {
-      if (l[0].PostOffice !== null) {
-        l = {
-          city: l[0].PostOffice[0].Division,
-          state: l[0].PostOffice[0].State
-        }
-      } else {
-        l = {
-          city: 'invalid',
-          state: 'invalid'
+    let promise = updateDetails(formData, props.userType)
+    promise.then(
+      res => {
+        if (res.status === 201) {
+          alert('profile updated!')
+          stateObject.updateAppData(
+            prev => {
+              return {
+                ...prev,
+                userInfo: res.userInfo
+              }
+            }
+          )
+        } else {
+          alert('some error occured in server side')
         }
       }
-      updateForm((prevData) => {
-        return {
-          ...prevData,
-          pincode: pincode,
-          ...l
-        }
-      })
-    })
-    location.catch(err => {
-      console.log('some error')
-    })
+    )
+    promise.catch((error) => console.error('error is: ' + error));
   }
+
 
   function handleChange(event) {
     if (event.target.name.localeCompare('pincode') === 0 && event.target.value.length >= 6) {
-      getLocation(event.target.value)
-    } else {
+      const pincode = event.target.value
+      let data = getLocation(pincode)
+      data.then(l => {
+        if (l[0].PostOffice !== null) {
+          l = {
+            city: l[0].PostOffice[0].Division,
+            state: l[0].PostOffice[0].State
+          }
+        } else {
+          l = {
+            city: 'invalid',
+            state: 'invalid'
+          }
+        }
+        updateForm(prevData => {
+          return {
+            ...prevData,
+            [event.target.name]: pincode,
+            city: l.city,
+            state: l.state
+          }
+        })
+      }
+      )
+      data.catch(err => { console.log('some error') })
+    }
+    else {
       updateForm((prevData) => {
         return {
           ...prevData,
@@ -93,7 +96,7 @@ export default function UpdateProfile(props) {
   return (
     <div className='container p-8'>
       <Grid container spacing={2}>
-        <Grid xs={5} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <Grid item xs={5} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <div>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: avatarSize, height: avatarSize, bgcolor: grey[500], alignContent: 'center' }}>A</Avatar>
           </div>
@@ -102,11 +105,11 @@ export default function UpdateProfile(props) {
             <Button variant="contained" startIcon={<UploadFile />}>upload</Button>
           </div>
         </Grid>
-        <Grid xs={5} sx={{ justifyContent: 'center', display: 'flex' }}>
+        <Grid item xs={5} sx={{ justifyContent: 'center', display: 'flex' }}>
           <form onSubmit={updateProfile} className='capitalize'>
             <div className='grid grid-cols-2 gap-4'>
-              <TextField label='first name' onChange={handleChange} type='text' value={formData.firstName} name='firstName' margin='normal' />
-              <TextField label='last name' onChange={handleChange} type='text' value={formData.lastName} name='lastName' margin='normal' />
+              <TextField label='first name' onChange={handleChange} type='text' value={formData.first_name} name='first_name' margin='normal' />
+              <TextField label='last name' onChange={handleChange} type='text' value={formData.last_name} name='last_name' margin='normal' />
             </div>
             <div>
               <TextField label='email' onChange={handleChange} type='text' value={formData.email} name='email' margin='normal' fullWidth />
@@ -124,7 +127,7 @@ export default function UpdateProfile(props) {
             </div>
             <div>
               <Box sx={{ justifyContent: 'center', display: 'flex' }}>
-                <Button variant='contained' color='primary'>Update</Button>
+                <Button variant='contained' color='primary' type='submit'>Update</Button>
               </Box>
             </div>
           </form>
@@ -132,4 +135,36 @@ export default function UpdateProfile(props) {
       </Grid>
     </div>
   )
+}
+
+async function getLocation(pincode) {
+  let response = await fetch(`https://api.postalpincode.in/pincode/${pincode}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+    }
+  })
+  response = await response.json()
+  return response
+}
+
+async function updateDetails(data, userType) {
+  console.log(data)
+  let link = ''
+  if (userType === 1) {
+    link = 'http://127.0.0.1:8000/api/publisher/profile/update/'
+  } else {
+    link = 'http://127.0.0.1:8000/api/customer/profile/update/'
+  }
+  let response = await fetch(link, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+    headers: {
+      'Authorization': `JWT ${localStorage.getItem('access')}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  })
+  response = await response.json();
+  return response;
 }

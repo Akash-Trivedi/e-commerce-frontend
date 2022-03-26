@@ -5,7 +5,6 @@ export default function ApplicationState(props) {
   /**
    * userType: 0(customer), 1(publisher)
    */
-
   const [appData, updateAppData] = React.useState({
     tags: [],
     products: [],
@@ -17,8 +16,9 @@ export default function ApplicationState(props) {
     userType: 0,
     totalSales: 0,
     shops: [],
-    allInfo: {},
+    userInfo: {},
     products: [],
+    publisherProducts: [],
     feedbacks: []
   });
 

@@ -7,7 +7,7 @@ import CustomerPrivateRoutes from './customer/routes/CustomerPrivateRoutes'
 import Product from './main/components/Product'
 import AddressSelection from './utility/components/AddressSelection'
 import NotFound from './utility/components/NotFound'
-import Cart from './customer/components/ShoppingCart'
+import ShoppingCart from './customer/components/ShoppingCart'
 import ApplicationState from "./main/state/ApplicationState"
 import Homepage from "./main/components/Homepage"
 import About from "./main/components/About"
@@ -51,7 +51,7 @@ ReactDOM.render(
           <Route path='product'>
             <Route path=":productId" element={<Product />} />
           </Route>
-          <Route path='cart' element={<Cart />} />
+          <Route path='cart' element={<ShoppingCart />} />
           <Route path='about' element={<About />} />
           <Route path='support' element={<Support />} />
           <Route path='publisher-signup' element={<Signup variables={publisherSignupVariables} />} />

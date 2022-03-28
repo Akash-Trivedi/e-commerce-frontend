@@ -22,13 +22,13 @@ export default function ShoppingCart() {
   console.log(stateObject.appData.cart)
   return (
     <box>
-      <Grid container sx={{ ml: 4, bgcolor: 'white', color: 'white' }} columnGap='2'>
-        <Grid item xs={8}>
-          
+      <Grid container sx={{ p: 2, bgcolor: 'white', color: 'white' }} columnGap='2'>
+        <Grid item xs={9}>
+          items
         </Grid>
 
         <Grid item xs={3} sx={{bgcolor: 'gray', color: 'black' }}>
-          
+          summary
         </Grid>
       </Grid>
     </box>

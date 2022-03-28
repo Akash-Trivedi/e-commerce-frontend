@@ -31,7 +31,6 @@ export default function Dashboard() {
       ['add new product', 'new-product'],
       ['add new shop', 'new-shop'],
       ['update inventory', 'update-product'],
-      ['statistics', 'sales-report'],
       ['order history', 'orders'],
       ['update profile', 'update-profile'],
     ]
@@ -74,20 +73,20 @@ export default function Dashboard() {
   }
 
   return (
-    <Box sx={{ minWidth: 400 }}>
-      <Grid container spacing={2} sx={{ pt: 1, pl: 2 }}>
+    <Box sx={{ minWidth: 400, bgcolor: 'white'}}>
+      <Grid container spacing={0}>
 
         {/* left side */}
         <Grid item xs={2}>
-          <div className="h-full hidden rounded-2xl lg:block my-3 ml-4 shadow-lg relative w-full">
-            <div className="bg-white h-full rounded-2xl dark:bg-gray-700 border-r-4 border-blue-500">
-              <div className="relative flex items-center justify-end w-1/4 ml-5 mr-4 sm:mr-0 sm:right-auto">
+          <div className="h-full hidden lg:block shadow-lg relative w-full">
+            <div className="bg-white h-full dark:bg-gray-700">
+              <div className="relative flex items-center justify-end w-1/4 mr-4 sm:mr-0 sm:right-auto">
                 <Avatar alt="Remy Sharp" sx={{ width: 50, height: 50, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>A</Avatar>
               </div>
               {
                 sideNavContent.name.map((value) => {
                   return (
-                    <span className="w-full font-thin capitalize text-blue-500 flex items-center p-3 transition-colors duration-200 justify-start bg-gradient-to-r from-white to-gray-100 dark:from-gray-700 dark:to-gray-800 border-r-4">
+                    <span className="w-full font-thin capitalize text-blue-500 flex items-center p-3 transition-colors duration-200 justify-start">
                       <NavLink className="mx-4 text-sm font-normal" to={value[1]}>{value[0]}</NavLink>
                     </span>
                   )
@@ -99,13 +98,13 @@ export default function Dashboard() {
 
         {/* right partition to navigation */}
         <Grid item xs={10}>
-          <Grid container spacing={2} sx={{ p: 2 }}>
+          <Grid container spacing={0}>
             {/* header */}
             <Grid item xs={12}>
-              <Grid container spacing={2} sx={{ p: 2 }}>
-                <header className="w-full shadow-lg bg-white dark:bg-gray-700 items-center h-16 rounded-2xl">
-                  <div className="flex items-center justify-end ml-5 mr-4 sm:mr-0 sm:right-auto">
-                    <Grid item xs={4}>
+              <Grid container spacing={0} sx={{ p: 0 }}>
+                <header className="w-full shadow-lg bg-white dark:bg-gray-700 items-center h-16">
+                  <div className="flex items-center justify-end p-2 mr-4 sm:mr-0 sm:right-auto">
+                    <Grid item xs={4} sx={{px:2}}>
                       <span>Shops Registered: <span className='text-lime-500 font-semibold'>{stateObject.appData.shops.length}</span></span>
                     </Grid>
                     <Grid item xs={4}>

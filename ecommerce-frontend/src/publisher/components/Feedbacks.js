@@ -6,46 +6,62 @@
  */
 import React, { useContext } from 'react'
 import {
-  Rating
+  Rating, Box, Grid, Accordion, AccordionSummary, AccordionDetails, Typography
 } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ApplicationContext from '../../main/context/ApplicationContext'
 
 export default function Feedbacks() {
   const stateObject = useContext(ApplicationContext)
   const feedbacks = stateObject.appData.feedbacks
   return (
-    <section className="pb-6 lg:pb-10 bg-[#F3F4F6]">
-      <div className="container">
-        <div className="flex flex-wrap -mx-4">
-          {
-            feedbacks.length === 0 ? true :
-              (feedbacks.map(f => {
-                return <FeedbackBlock data={f} key={f.feedbackId} />
-              }))
-          }
-        </div>
-      </div>
-    </section>
+    <Box sx={{ p: 4, justifyContent: 'center', display: 'flex' }}>
+      <Grid container gap={2}>
+        {
+          feedbacks.length === 0 ? true :
+            (feedbacks.map((f) => {
+              return <FeedbackBlock data={f} list={stateObject.appData.publisherProducts} key={f.feedbackId} />
+            }))
+        }
+      </Grid>
+    </Box>
   )
 }
 
 function FeedbackBlock(props) {
-  /**
-   * 
-   */
-  let feedbacks = props.data
+  let feedback = props.data
+  let list = props.list
   return (
-    <div className="w-full md:w-1/2 xl:w-1/3 px-4">
-      <div className="bg-white rounded-lg overflow-hidden mb-2">
-        <div className="p-8 sm:p-9 md:p-7 xl:p-4 text-center">
-          <p className="text-base text-body-color leading-relaxed mb-7">
-            {feedbacks.review}
-          </p>
-          <div className="flex items-center">
-            <Rating name="read-only" value={feedbacks.starValue} readOnly />
-          </div>
-        </div>
-      </div>
-    </div>
+    <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <Accordion className='capitalize'>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2a-content" id={feedback.feedbackId} sx={{ bgcolor: '#546E7A', color: 'white' }}>
+          <Typography>
+            {`${feedback.heading}`}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails sx={{ bgcolor: '#E0E0E0', color: 'black' }} >
+          <Typography>
+            {`product: ${getProduct(feedback.productId, list).name}`}
+          </Typography>
+          <Typography>
+            {`review: ${feedback.review}`}
+          </Typography>
+          <Typography>
+            <Rating name="read-only" value={feedback.starValue} readOnly />
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+    </Grid>
   )
+}
+
+function getProduct(id, list) {
+  let product = null;
+  for (let index = 0; index < list.length; index++) {
+    if (list[index].productId === id) {
+      product = list[index]
+      break
+    }
+  }
+  return product;
 }

@@ -83,6 +83,26 @@ export default function UpdateProfile(props) {
       )
       data.catch(err => { console.log('some error') })
     }
+    else if (event.target.name.localeCompare('profilePhoto') === 0) {
+      if (event.target.files.length === 1 && event.target.files[0].type.localeCompare('image/jpeg') === 0) {
+        updateForm(p => {
+          return {
+            ...p,
+            [event.target.name]: event.target.files[0].name,
+            file: event.target.files[0]
+          }
+        })
+      } else {
+        alert('selected file is invalid, choose only');
+        updateForm(p => {
+          return {
+            ...p,
+            [event.target.name]: null,
+            file: null
+          }
+        })
+      }
+    }
     else {
       updateForm((prevData) => {
         return {
@@ -98,11 +118,12 @@ export default function UpdateProfile(props) {
       <Grid container spacing={2}>
         <Grid item xs={5} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <div>
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" sx={{ width: avatarSize, height: avatarSize, bgcolor: grey[500], alignContent: 'center' }}>A</Avatar>
+            <Avatar alt='Remy Sharp' src='/static/images/avatar/1.jpg' sx={{ width: avatarSize, height: avatarSize, bgcolor: grey[500], alignContent: 'center' }}>A</Avatar>
           </div>
           <br />
           <div>
-            <Button variant="contained" startIcon={<UploadFile />}>upload</Button>
+            <label htmlFor='fileUpload'>Upload File</label>
+            <input id='fileUpload' type='file' name='profilePhoto' onChange={handleChange} />
           </div>
         </Grid>
         <Grid item xs={5} sx={{ justifyContent: 'center', display: 'flex' }}>
@@ -133,7 +154,7 @@ export default function UpdateProfile(props) {
           </form>
         </Grid>
       </Grid>
-    </div>
+    </div >
   )
 }
 

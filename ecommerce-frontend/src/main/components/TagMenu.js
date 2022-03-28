@@ -16,14 +16,12 @@ function TagChip(props) {
 export default function TagMenu() {
   const { appData } = useContext(ApplicationContext)
   return (
-    <div className="px-2 py-2">
-      <Box display='flex' alignItems='center' justifyContent='center' flexWrap='wrap'>
-        {
-          appData.tags.map((tag) => {
-            return <TagChip tag={tag} key={tag.tagId} />
-          })
-        }
-      </Box>
-    </div>
+    <Box display='flex' alignItems='center' justifyContent='center' flexWrap='wrap' bgcolor='white' sx={{ p: 2 }}>
+      {
+        appData.tags.map((tag) => {
+          return <TagChip tag={tag} key={tag.tagId} />
+        })
+      }
+    </Box>
   )
 }

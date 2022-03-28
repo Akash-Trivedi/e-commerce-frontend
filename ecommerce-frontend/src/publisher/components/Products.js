@@ -6,13 +6,9 @@
  */
 import React, { useContext } from 'react'
 import {
-  Box, Grid, Rating, Button
+  Box, Grid, Rating, Button, Accordion, AccordionSummary, AccordionDetails, Typography
 } from '@mui/material'
 import ApplicationContext from '../../main/context/ApplicationContext'
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useNavigate } from 'react-router-dom';
 
@@ -38,24 +34,21 @@ function SingleProduct(props) {
   return (
     <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       <Accordion className='capitalize'>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2a-content" id={product.productId}>
-          <Typography>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2a-content" id={product.productId} sx={{ bgcolor: '#7F8C8D', color: 'white' }}>
+          <Typography sx={{px: 0}}>
             {`${product.companyName}: ${product.name}`}
           </Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
+        <AccordionDetails sx={{ bgcolor: '#E0E0E0', color: 'black' }} >
+          <Typography sx={{p: 1}}>
             {`Description: ${product.description}`}
           </Typography>
-          <Typography>
+          <Typography sx={{p: 1}}>
             {`price: ${product.price} off: ${product.discount}%`}
           </Typography>
-          <Typography>
+          <Typography sx={{p: 1}}>
             {`total reviews: ${product.totalFeedbacks}`}
             <Rating name="simple-controlled" readOnly value={parseInt(product.feedBackValue)} size='small' />
-          </Typography>
-          <Typography>
-            <Button label='update'  variant='contained' onClick={() => { navigate('/publisher-dashboard/update-product/', { product }) }}>update</Button>
           </Typography>
         </AccordionDetails>
       </Accordion>

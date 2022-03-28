@@ -5,9 +5,8 @@
  * caller-function: ecommerce-frontend\src\index.js
  */
 import React, { useContext } from 'react'
-import { useLocation } from 'react-router-dom';
 import {
-  Grid, TextField, Avatar, MenuItem, FormHelperText, Select,
+  Grid, TextField, MenuItem, Select,
   FormControl, InputLabel, Box, Button
 } from '@mui/material'
 import ApplicationContext from '../../main/context/ApplicationContext';
@@ -16,9 +15,7 @@ export default function NewProduct() {
   const stateObject = useContext(ApplicationContext)
   let stocks = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
   let discounts = [0, 5, 10, 12, 15, 17, 20, 22, 25, 33]
-  let colors = [
-    'white', 'grey', 'black', 'red', 'green', 'blue', 'yellow'
-  ]
+  let colors = ['white', 'grey', 'black', 'red', 'green', 'blue', 'yellow']
   let [product, updateProduct] = React.useState({
     name: '',
     products: [],
@@ -33,28 +30,17 @@ export default function NewProduct() {
     shopId_id: '',
     tagId_id: ''
   })
-  function registerProduct(event) {
+
+  function updateProductOnServer(event) {
     event.preventDefault();
 
-    async function updateProduct(data) {
-      let response = await fetch(`http://localhost:8000/api/publisher/product/update/`, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      response = await response.json();
-      return response;
-    }
-    let response = updateProduct(product)
+    let response = updateInventory(product)
       .then((response) => console.log(response))
       .catch((error) => console.error("error is: " + error));
   }
 
   function handleChange(event) {
-    if (event.target.name === 'shopId') {
+    if (event.target.name.localeCompare('shopId') === 0) {
       updateProduct((prevData) => {
         return {
           ...prevData,
@@ -62,6 +48,12 @@ export default function NewProduct() {
           products: getProductList(stateObject.appData.publisherProducts, event.target.value)
         }
       })
+    } else if (event.target.name.localeCompare('productId') === 0) {
+      updateProduct(
+        prev => {
+          return getProductInfo(product.products, event.target.value, prev)
+        }
+      )
     }
     updateProduct((prevData) => {
       return {
@@ -73,7 +65,7 @@ export default function NewProduct() {
 
   return (
     <Box sx={{ p: 4, justifyContent: 'center', display: 'flex' }}>
-      <form onSubmit={registerProduct}>
+      <form onSubmit={updateProductOnServer}>
         <Grid container direction='row' justifyContent='center' alignItems='center' spacing={2}>
 
           {/* single row */}
@@ -93,7 +85,7 @@ export default function NewProduct() {
           {/* row 2 */}
           <Grid item xs={12}>
             <FormControl fullWidth required margin='normal' >
-              <InputLabel>shop</InputLabel>
+              <InputLabel>product</InputLabel>
               <Select name='productId' label='product' onChange={handleChange} required variant='outlined'>
                 {
                   product.products.map(product => {
@@ -172,7 +164,7 @@ export default function NewProduct() {
         </Grid>
         <div>
           <Box sx={{ justifyContent: 'center', display: 'flex' }}>
-            <Button variant='contained' color='primary' margin='normal' type='submit'>add</Button>
+            <Button variant='contained' color='primary' margin='normal' type='submit'>update</Button>
           </Box>
         </div>
       </form>
@@ -182,8 +174,6 @@ export default function NewProduct() {
 
 
 function getProductList(list, id) {
-  console.log(list)
-  console.log(id)
   let filteredList = [];
   for (let index = 0; index < list.length; index++) {
     if (list[index].shopId === id) {
@@ -191,4 +181,32 @@ function getProductList(list, id) {
     }
   }
   return filteredList;
+}
+
+function getProductInfo(productList, id, prev) {
+  let productInfo = {}
+  for (let index = 0; index < productList.length; index++) {
+    if (productList[index].productId === id) {
+      console.log(productList[index])
+      productInfo = productList[index]
+    }
+  }
+
+  return {
+    ...prev,
+    ...productInfo
+  }
+}
+
+async function updateInventory(data) {
+  let response = await fetch(`http://localhost:8000/api/product/update/`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+  response = await response.json();
+  return response;
 }

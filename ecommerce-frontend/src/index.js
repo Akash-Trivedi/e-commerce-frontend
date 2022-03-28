@@ -1,16 +1,17 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import App from "./App"
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './App'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import PublisherPrivateRoutes from './publisher/routes/PublisherPrivateRoutes'
 import CustomerPrivateRoutes from './customer/routes/CustomerPrivateRoutes'
 import Product from './main/components/Product'
+import ProductsOnTag from './main/components/ProductsOnTag'
 import AddressSelection from './utility/components/AddressSelection'
 import NotFound from './utility/components/NotFound'
 import ShoppingCart from './customer/components/ShoppingCart'
-import ApplicationState from "./main/state/ApplicationState"
-import Homepage from "./main/components/Homepage"
-import About from "./main/components/About"
+import ApplicationState from './main/state/ApplicationState'
+import Homepage from './main/components/Homepage'
+import About from './main/components/About'
 import Support from './main/components/Support'
 import Login from './utility/components/Login'
 import Signup from './utility/components/Signup'
@@ -49,7 +50,10 @@ ReactDOM.render(
         <Route path='/' element={<App title={websiteTitle} />}>
           <Route path='homepage' element={<Homepage />} />
           <Route path='product'>
-            <Route path=":productId" element={<Product />} />
+            <Route path=':productId' element={<Product />} />
+          </Route>
+          <Route path='tag'>
+            <Route path=':tagId' element={<ProductsOnTag />} />
           </Route>
           <Route path='cart' element={<ShoppingCart />} />
           <Route path='about' element={<About />} />
@@ -64,5 +68,5 @@ ReactDOM.render(
       <CustomerPrivateRoutes />
     </BrowserRouter>
   </ApplicationState >,
-  document.getElementById("root")
+  document.getElementById('root')
 )

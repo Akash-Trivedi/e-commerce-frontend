@@ -6,55 +6,70 @@
  */
 import React, { useContext } from 'react'
 import {
-  Box,
-  Grid
+  Box, Grid, Rating, Button
 } from '@mui/material'
 import ApplicationContext from '../../main/context/ApplicationContext'
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { useNavigate } from 'react-router-dom';
 
-function ShopBlock(props) {
-  const { name, pincode, address, registrationDate, city, state, sales, productCount } = props.data
-  const registrationDate1 = new Date(registrationDate)
+export default function Products(props) {
+  console.log('publisher products are now rendered');
+  const stateObject = useContext(ApplicationContext)
   return (
-    <Grid item xs={5}>
-      <div className="text-black flex border-2 rounded-lg border-gray-700 border-opacity-50 p-4 sm:flex-row flex-col">
-        <div className="w-8 h-8 sm:mr-8 sm:mb-0 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 flex-shrink-0">
-          <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" className="w-8 h-8" viewBox="0 0 24 24">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-          </svg>
-        </div>
-        <div className="flex-grow">
-          <h2 className="text-lg title-font font-medium mb-2 capitalize">{name}</h2>
-          <p className="leading-relaxed text-base font-semibold lowercase">
-            address:&nbsp;<i className='font-normal capitalize'>{address}, {pincode}, {city}, {state}</i>
-          </p>
-          <p className="leading-relaxed text-base font-semibold lowercase">
-            registration date: &nbsp;<i className='font-normal capitalize'>{registrationDate.slice(0, 10)}</i>
-          </p>
-          <p className="leading-relaxed text-base font-semibold lowercase">
-            sale: &nbsp;<i className='font-semibold capitalize text-lime-500'>{sales}</i>&nbsp;&nbsp;
-            items for sale: &nbsp;<i className='font-semibold capitalize text-lime-500'>{productCount}</i>
-          </p>
-        </div>
-      </div>
+    <Grid container sx={{ p: 2 }}>
+      {
+        stateObject.appData.publisherProducts.map(
+          (product) => {
+            return <SingleProduct product={product} key={product.productId} />
+          }
+        )
+      }
     </Grid>
   );
 }
 
-
-export default function Shops() {
-  const stateObject = useContext(ApplicationContext)
-  const shops = stateObject.appData.shops
+function SingleProduct(props) {
+  const navigate = useNavigate()
+  const product = props.product
   return (
-    <Box sx={{ p: 2 }}>
-      <Grid container rowGap={1} columnGap={1} direction="row" justifyContent="center" alignItems="center" >
-        {
-          shops === null || shops.length === 0 ? true : (
-            shops.map((shop) => {
-              return <ShopBlock data={shop} key={shop.shopId} />
-            })
-          )
-        }
-      </Grid>
-    </Box>
+    <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+      <Accordion className='capitalize'>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2a-content" id={product.productId}>
+          <Typography>
+            {`${product.companyName}: ${product.name}`}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            {`Description: ${product.description}`}
+          </Typography>
+          <Typography>
+            {`price: ${product.price} off: ${product.discount}%`}
+          </Typography>
+          <Typography>
+            {`total reviews: ${product.totalFeedbacks}`}
+            <Rating name="simple-controlled" readOnly value={parseInt(product.feedBackValue)} size='small' />
+          </Typography>
+          <Typography>
+            <Button label='update'  variant='contained' onClick={() => { navigate('/publisher-dashboard/update-product/', { product }) }}>update</Button>
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+    </Grid>
   )
 }
+
+// color: "white"
+// edition: "basic"
+// feedBackValue: 0
+// name: "1.5 tonne AC"
+// productId: 5
+// shopId: 7
+// size: "-"
+// stock: 5
+// tagId: 1
+// totalFeedbacks: 0

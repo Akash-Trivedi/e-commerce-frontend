@@ -17,8 +17,8 @@ import {
 export default function Footer() {
   console.log('footer component rendered');
   return (
-    <Box>
-      <footer className='bg-white lg:pt-[120px] pb-10 lg:pb-20 relative z-10 capitalize'>
+    <Box className='bg-white lg:pt-[120px] pb-10 lg:pb-20 relative z-10 capitalize'>
+      <footer>
         <Grid container columnGap={0} display='flex' direction='right' justifyContent='center'>
 
           {/* column-1 */}

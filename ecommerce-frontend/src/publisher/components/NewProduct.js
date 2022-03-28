@@ -5,9 +5,8 @@
  * caller-function: ecommerce-frontend\src\index.js
  */
 import React from 'react'
-import { useLocation } from 'react-router-dom';
 import {
-  Grid, TextField, Avatar, MenuItem, FormHelperText, Select,
+  Grid, TextField, MenuItem, Select,
   FormControl, InputLabel, Box, Button
 } from '@mui/material'
 import ApplicationContext from '../../main/context/ApplicationContext';
@@ -38,7 +37,7 @@ export default function NewProduct() {
     event.preventDefault();
     async function updateProduct(data) {
       console.log(data);
-      let response = await fetch(`http://localhost:8000/api/publisher/product/add/`,
+      let response = await fetch(`http://localhost:8000/api/product/add/`,
         {
           method: 'POST',
           body: JSON.stringify(data),
@@ -161,8 +160,8 @@ export default function NewProduct() {
               <InputLabel>tags</InputLabel>
               <Select name='tagId_id' label='tag' onChange={handleChange}>
                 {
-                  colors.map(value => {
-                    return <MenuItem value={value}>{value}</MenuItem>
+                  stateObject.appData.tags.map(tag => {
+                    return <MenuItem value={tag.tagId}>{tag.tagName}</MenuItem>
                   })
                 }
               </Select>

@@ -7,18 +7,39 @@
 
 import React, { useContext } from 'react';
 import {
-  Box, Grid, Pagination
+  Box, Grid
 } from '@mui/material'
-
+import { useParams } from 'react-router-dom';
 import ProductPreview from './ProductPreview';
 import ApplicationContext from '../context/ApplicationContext';
 
 export default function Homepage() {
   const stateObject = useContext(ApplicationContext)
-  console.log(stateObject);
+  let { tagId } = useParams();
   const products = stateObject.appData.products
   let [currentPage, setCurrentPage] = React.useState(0)
-  console.log('main component rendered');
+
+  React.useEffect(
+    () => {
+      fetch(`http://localhost:8000/api/product/tag/${tagId}/`,
+        {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json'
+          }
+        })
+        .then(res => res.json())
+        .then(res => {
+          stateObject.updateAppData(prev => {
+            return {
+              ...prev,
+              products: res.products
+            }
+          })
+        })
+        .catch(err => { console.log(err) })
+    }, [tagId]);
+
   return (
     <section className='text-gray-600 body-font'>
       <Box sx={{ p: 3 }}>
@@ -36,4 +57,3 @@ export default function Homepage() {
     </section>
   );
 }
-{/* <Pagination count={10} shape="rounded" sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} /> */}

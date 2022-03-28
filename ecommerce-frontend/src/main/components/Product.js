@@ -8,7 +8,7 @@
 import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import {
-  Rating
+  Rating, Box
 } from '@mui/material'
 import ApplicationContext from '../context/ApplicationContext';
 
@@ -51,7 +51,7 @@ export default function Product() {
   }
 
   return (
-    <div>
+    <Box sx={{p:2}}>
       <section className='text-gray-600 body-font overflow-hidden'>
         <div className='container px-12 py-5 mx-auto'>
           <div className='lg:w-4/5 mx-auto flex flex-wrap'>
@@ -68,7 +68,7 @@ export default function Product() {
                 </span>
               </div>
               <p className='leading-relaxed'><strong>Description:</strong> {product.description}</p>
-              <div className='flex mt-4 items-center pb-5 border-b-2 border-gray-100 mb-5'>
+              <div className='flex mt-4 items-center pb-5 border-b-2 border-gray-100 mb-3'>
                 <div className='flex'>
                   <span className='mr-3'>Color</span>
                   <i className='border-2 border-gray-300 ml-1 bg-white rounded-full w-6 h-6 focus:outline-none'></i>
@@ -79,13 +79,16 @@ export default function Product() {
                 </div>
               </div>
               <div className='flex'>
-                <span className='title-font font-medium text-2xl text-lime-700'>&#8377;{newPrice}</span>
+                <span className='title-font font-medium text-xl text-black'>
+                  price: <i className='text-lime-700'>&#8377;{newPrice}</i>
+                </span>
                 <button className='flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded' onClick={addToCart}>Add to Cart</button>
               </div>
             </div>
           </div>
         </div>
+        <hr />
       </section>
-    </div>
+    </Box>
   );
 }

@@ -4,50 +4,40 @@
  * functionality: renders new product form
  * caller-function: ecommerce-frontend\src\index.js
  */
-import React from 'react'
+import React, { useContext } from 'react'
 import { useLocation } from 'react-router-dom';
 import {
   Grid, TextField, Avatar, MenuItem, FormHelperText, Select,
   FormControl, InputLabel, Box, Button
 } from '@mui/material'
+import ApplicationContext from '../../main/context/ApplicationContext';
 
 export default function NewProduct() {
-  const loc = useLocation()
+  const stateObject = useContext(ApplicationContext)
   let stocks = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
   let discounts = [0, 5, 10, 12, 15, 17, 20, 22, 25, 33]
   let colors = [
     'white', 'grey', 'black', 'red', 'green', 'blue', 'yellow'
   ]
-  let shops = [
-    {
-      shopId: 1,
-      shopName: 'Prakash Eyeware'
-    },
-    {
-      shopId: 2,
-      shopName: 'Indra Electronics',
-    }
-
-  ]
-  let [product, updateProduct] = React.useState(
-    {
-      name: 'Seagate 1TB HDD, Black 2year warranty',
-      companyName: 'Seagate US',
-      description: 'Seagate 1TB HDD, Black 2 Year warranty Model SEDAFLKLN234N2',
-      stock: '10',
-      price: '5550',
-      size: '-',
-      color: 'BALCK',
-      discount: '7',
-      edition: 'basic',
-      shopName: ''
-    }
-  )
+  let [product, updateProduct] = React.useState({
+    name: '',
+    products: [],
+    companyName: '',
+    description: '',
+    stock: '0',
+    price: '0',
+    size: '-',
+    color: '',
+    discount: '0',
+    edition: '-',
+    shopId_id: '',
+    tagId_id: ''
+  })
   function registerProduct(event) {
     event.preventDefault();
 
     async function updateProduct(data) {
-      let response = await fetch(`http://localhost:8000/api/publisher/product/add/`, {
+      let response = await fetch(`http://localhost:8000/api/publisher/product/update/`, {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {
@@ -68,7 +58,8 @@ export default function NewProduct() {
       updateProduct((prevData) => {
         return {
           ...prevData,
-          shopName: event.target.value
+          shopId: event.target.value,
+          products: getProductList(stateObject.appData.publisherProducts, event.target.value)
         }
       })
     }
@@ -81,37 +72,47 @@ export default function NewProduct() {
   }
 
   return (
-    <Box sx={{ py: 4, px:6, justifyContent: 'center', display: 'flex' }}>
+    <Box sx={{ p: 4, justifyContent: 'center', display: 'flex' }}>
       <form onSubmit={registerProduct}>
-        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
+        <Grid container direction='row' justifyContent='center' alignItems='center' spacing={2}>
 
           {/* single row */}
           <Grid item xs={12}>
-            <TextField fullWidth margin='normal' disabled type="text" name='shopName' label="add to this shop name" value={product.shopName} />
+            <FormControl fullWidth required margin='normal' >
+              <InputLabel>shop</InputLabel>
+              <Select name='shopId' label='shop' onChange={handleChange} required variant='outlined'>
+                {
+                  stateObject.appData.shops.map(shop => {
+                    return <MenuItem value={shop.shopId} onChange={handleChange}>{shop.name}</MenuItem>
+                  })
+                }
+              </Select>
+            </FormControl>
           </Grid>
 
-          {/* second row */}
-          <Grid item xs={3}>
-            <TextField fullWidth margin='normal' disabled type="text" name='companyName' label="Company Name" value={product.companyName} required />
-          </Grid>
-
-          <Grid item xs={3}>
-            <TextField fullWidth margin='normal' disabled type="text" name='name' label="Product Name" value={product.name} required />
-          </Grid>
-
-          <Grid item xs={6}>
-            <TextField fullWidth label='description' disabled type="text" name='description' value={product.description} required margin='normal'/>
+          {/* row 2 */}
+          <Grid item xs={12}>
+            <FormControl fullWidth required margin='normal' >
+              <InputLabel>shop</InputLabel>
+              <Select name='productId' label='product' onChange={handleChange} required variant='outlined'>
+                {
+                  product.products.map(product => {
+                    return <MenuItem value={product.productId} onChange={handleChange}>{`${product.companyName}: ${product.name}`}</MenuItem>
+                  })
+                }
+              </Select>
+            </FormControl>
           </Grid>
 
           {/* third row */}
           <Grid item xs={2}>
-            <TextField fullWidth margin='normal' type="number" min='50' label='Price' onChange={handleChange} name="price" required />
+            <TextField fullWidth margin='normal' type='text' min='50' label='Price' onChange={handleChange} name='price' required value={product.price} />
           </Grid>
 
           <Grid item xs={2}>
             <FormControl fullWidth required margin='normal'>
               <InputLabel>stock</InputLabel>
-              <Select name='stock' label="stock" onChange={handleChange} required>
+              <Select name='stock' label='stock' onChange={handleChange} required>
                 {
                   stocks.map(value => {
                     return <MenuItem value={value}>{value}</MenuItem>
@@ -137,10 +138,10 @@ export default function NewProduct() {
           <Grid item xs={2}>
             <FormControl fullWidth margin='normal' >
               <InputLabel>tags</InputLabel>
-              <Select name='tagId' label='tag' onChange={handleChange}>
+              <Select name='tagId_id' label='tag' onChange={handleChange}>
                 {
-                  colors.map(value => {
-                    return <MenuItem value={value}>{value}</MenuItem>
+                  stateObject.appData.tags.map(tag => {
+                    return <MenuItem value={tag.tagId}>{tag.tagName}</MenuItem>
                   })
                 }
               </Select>
@@ -161,11 +162,11 @@ export default function NewProduct() {
           </Grid>
 
           <Grid item xs={2}>
-            <TextField fullWidth margin='normal' type="text" min='50' className='form-control' label='Edition' onChange={handleChange} name="edition" />
+            <TextField fullWidth margin='normal' type='text' min='50' className='form-control' label='Edition' onChange={handleChange} name='edition' value={product.edition} />
           </Grid>
 
           <Grid item xs={2}>
-            <TextField fullWidth margin='normal' type="text" min='50' className='form-control' label='Size' onChange={handleChange} name="size" />
+            <TextField fullWidth margin='normal' type='text' min='50' className='form-control' label='Size' onChange={handleChange} name='size' value={product.size} />
           </Grid>
 
         </Grid>
@@ -177,4 +178,17 @@ export default function NewProduct() {
       </form>
     </Box>
   )
+}
+
+
+function getProductList(list, id) {
+  console.log(list)
+  console.log(id)
+  let filteredList = [];
+  for (let index = 0; index < list.length; index++) {
+    if (list[index].shopId === id) {
+      filteredList.push(list[index])
+    }
+  }
+  return filteredList;
 }

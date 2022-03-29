@@ -9,18 +9,18 @@ import {
   Rating, Box, Grid, Accordion, AccordionSummary, AccordionDetails, Typography
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ApplicationContext from '../../main/context/ApplicationContext'
+import UserContext from '../../main/context/UserContext'
 
 export default function Feedbacks() {
-  const stateObject = useContext(ApplicationContext)
-  const feedbacks = stateObject.appData.feedbacks
+  const stateObject = useContext(UserContext)
+  const feedbacks = stateObject.userData.feedbacks
   return (
     <Box sx={{ p: 4, justifyContent: 'center', display: 'flex' }}>
       <Grid container gap={2}>
         {
           feedbacks.length === 0 ? true :
             (feedbacks.map((f) => {
-              return <FeedbackBlock data={f} list={stateObject.appData.publisherProducts} key={f.feedbackId} />
+              return <FeedbackBlock data={f} list={stateObject.userData.products} key={f.feedbackId} />
             }))
         }
       </Grid>

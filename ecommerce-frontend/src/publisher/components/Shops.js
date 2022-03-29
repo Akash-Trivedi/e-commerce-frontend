@@ -9,7 +9,7 @@ import {
   Box,
   Grid
 } from '@mui/material'
-import ApplicationContext from '../../main/context/ApplicationContext'
+import UserContext from '../../main/context/UserContext'
 
 function ShopBlock(props) {
   const { name, pincode, address, registrationDate, city, state, sales, productCount } = props.data
@@ -42,8 +42,8 @@ function ShopBlock(props) {
 
 
 export default function Shops() {
-  const stateObject = useContext(ApplicationContext)
-  const shops = stateObject.appData.shops
+  const stateObject = useContext(UserContext)
+  const shops = stateObject.userData.shops
   return (
     <Box sx={{ p: 2 }}>
       <Grid container rowGap={1} columnGap={1} direction="row" justifyContent="center" alignItems="center" >

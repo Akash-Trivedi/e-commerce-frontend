@@ -8,17 +8,17 @@ import React, { useContext } from 'react'
 import {
   Box, Grid, Rating, Button, Accordion, AccordionSummary, AccordionDetails, Typography
 } from '@mui/material'
-import ApplicationContext from '../../main/context/ApplicationContext'
+import UserContext from '../../main/context/UserContext'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useNavigate } from 'react-router-dom';
 
 export default function Products(props) {
   console.log('publisher products are now rendered');
-  const stateObject = useContext(ApplicationContext)
+  const stateObject = useContext(UserContext)
   return (
     <Grid container sx={{ p: 2 }}>
       {
-        stateObject.appData.publisherProducts.map(
+        stateObject.userData.products.map(
           (product) => {
             return <SingleProduct product={product} key={product.productId} />
           }

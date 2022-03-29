@@ -34,34 +34,43 @@ export default function Login(props) {
     })
   }
 
+  function showContent(event) {
+    let inputPassword = document.getElementById("password");
+    inputPassword.type.localeCompare('password') === 0 ? inputPassword.type = 'text' : inputPassword.type = 'password'
+  }
+
   function userLogin(event) {
-    event.preventDefault();
-    if (localStorage.getItem('access') === null || localStorage.getItem('access') === undefined) {
+    event.preventDefault()
+    if (!(localStorage.hasOwnProperty('access') && localStorage.hasOwnProperty('refresh'))) {
       console.log('token was not set');
-      let newtoken = refresh(formData)// returns promise
-      newtoken.then(
+      let promise = refresh(formData)// returns promise
+      promise.then(
         r => {
-          console.log('refresh token setted');
-          localStorage.setItem('access', r.access);
-          localStorage.setItem('refresh', r.refresh);
-          localStorage.setItem('userLoggedIn', true);
-          if (props.variables.userType === 0) {
-            localStorage.setItem('userType', 0);
-          } else {
-            localStorage.setItem('userType', 1);
-          }
-          stateObject.updateAppData(
-            prev => {
-              return {
-                ...prev,
-                userType: localStorage.getItem('userType'),
-                userLoggedIn: true
-              }
+          if (!r.hasOwnProperty('detail')) {
+            localStorage.setItem('access', r.access);
+            localStorage.setItem('refresh', r.refresh);
+            localStorage.setItem('userLoggedIn', true);
+            if (props.variables.userType === 0) {
+              localStorage.setItem('userType', 0);
+            } else {
+              localStorage.setItem('userType', 1);
             }
-          )
-          console.log(stateObject);
+            stateObject.updateAppData(
+              prev => {
+                return {
+                  ...prev,
+                  userType: localStorage.getItem('userType'),
+                  userLoggedIn: true
+                }
+              }
+            )
+            console.log(stateObject);
+          }
+          else {
+            alert('user does not exists')
+          }
         })
-      newtoken.then(
+      promise.then(
         r => {
           let res = login(formData)
           res.then(res => {
@@ -70,7 +79,8 @@ export default function Login(props) {
           res.catch(error => console.log(`error was : ${error}`))
         }
       )
-    } else {
+    }
+    else {
       let res = login(formData)
       res.then(res => {
         console.log(res);
@@ -86,10 +96,7 @@ export default function Login(props) {
   }
 
 
-  function showContent(event) {
-    let inputPassword = document.getElementById("password");
-    inputPassword.type.localeCompare('password') === 0 ? inputPassword.type = 'text' : inputPassword.type = 'password'
-  }
+
 
   return (
     <Box sx={{ p: 4, display: 'flex', justifyContent: 'center' }}>
@@ -103,11 +110,11 @@ export default function Login(props) {
           </Grid>
 
           <Grid item xs={7}>
-            <TextField label='contact' onChange={handleChange} type='text' value={formData.contact} name='username' fullWidth />
+            <TextField label='contact' onChange={handleChange} type='text' value={formData.contact} name='username' fullWidth autoComplete='false' />
           </Grid>
 
           <Grid item xs={7}>
-            <TextField label='password' onChange={handleChange} type='password' value={formData.password} name='password' fullWidth id='password' />
+            <TextField label='password' onChange={handleChange} type='password' value={formData.password} name='password' fullWidth id='password' autoComplete='false' />
           </Grid>
 
           <Grid item xs={7}>

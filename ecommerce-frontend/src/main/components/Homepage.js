@@ -15,10 +15,8 @@ import ApplicationContext from '../context/ApplicationContext';
 
 export default function Homepage() {
   const stateObject = useContext(ApplicationContext)
-  console.log(stateObject);
   const products = stateObject.appData.products
   let [currentPage, setCurrentPage] = React.useState(0)
-  console.log('main component rendered');
   return (
     <section className='text-gray-600 body-font'>
       <Box sx={{ p: 3 }}>

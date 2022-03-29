@@ -15,7 +15,6 @@ import {
 } from '@mui/material'
 
 export default function Footer() {
-  console.log('footer component rendered');
   return (
     <Box className='bg-white lg:pt-[120px] pb-10 lg:pb-20 relative z-10 capitalize'>
       <footer>

@@ -10,13 +10,13 @@ import {
   Grid, TextField, Avatar, Box
 } from '@mui/material'
 import { grey } from '@mui/material/colors'
-import ApplicationContext from '../../main/context/ApplicationContext'
+import UserContext from '../../main/context/UserContext'
 
 
 export default function Profile() {
-  const stateObject = useContext(ApplicationContext)
+  const stateObject = useContext(UserContext)
   const avatarSize = 250;
-  let formData = stateObject.appData.userInfo;
+  let formData = stateObject.userData.userInfo;
   console.log(formData);
 
   let address = `${formData.address}, ${formData.pincode}, ${formData.city}, ${formData.state}`

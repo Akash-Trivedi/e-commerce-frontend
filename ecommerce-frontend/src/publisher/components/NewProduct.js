@@ -11,9 +11,12 @@ import {
 } from '@mui/material'
 import ApplicationContext from '../../main/context/ApplicationContext';
 import { useContext } from 'react';
+import UserContext from '../../main/context/UserContext';
 
 export default function NewProduct() {
-  const stateObject = useContext(ApplicationContext)
+  const applicationStateObject = useContext(ApplicationContext)
+  const stateObject = useContext(UserContext)
+  console.log(stateObject.userData)
   let stocks = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
   let discounts = [0, 5, 10, 12, 15, 17, 20, 22, 25, 33]
   let colors = [
@@ -30,7 +33,7 @@ export default function NewProduct() {
     discount: '0',
     edition: '-',
     shopId_id: '',
-    tagId_id:''
+    tagId_id: ''
   }
   )
   function registerProduct(event) {
@@ -55,7 +58,7 @@ export default function NewProduct() {
       res => {
         if (res.status === 201) {
           alert('new product added!')
-          stateObject.updateAppData(
+          stateObject.updateUserData(
             prev => {
               return {
                 ...prev,
@@ -63,9 +66,9 @@ export default function NewProduct() {
               }
             }
           )
-        } else if(res.status === 409) {
+        } else if (res.status === 409) {
           alert('product already added')
-        } else{
+        } else {
           alert('server encountered error')
         }
       }
@@ -101,7 +104,7 @@ export default function NewProduct() {
               <InputLabel>shop</InputLabel>
               <Select name='shopId_id' label='shop' onChange={handleChange} required variant='outlined'>
                 {
-                  stateObject.appData.shops.map(shop => {
+                  stateObject.userData.shops.map(shop => {
                     return <MenuItem value={shop.shopId} onChange={handleChange}>{shop.name}</MenuItem>
                   })
                 }
@@ -160,7 +163,7 @@ export default function NewProduct() {
               <InputLabel>tags</InputLabel>
               <Select name='tagId_id' label='tag' onChange={handleChange}>
                 {
-                  stateObject.appData.tags.map(tag => {
+                  applicationStateObject.appData.tags.map(tag => {
                     return <MenuItem value={tag.tagId}>{tag.tagName}</MenuItem>
                   })
                 }

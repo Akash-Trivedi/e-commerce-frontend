@@ -10,9 +10,11 @@ import {
   FormControl, InputLabel, Box, Button
 } from '@mui/material'
 import ApplicationContext from '../../main/context/ApplicationContext';
+import UserContext from '../../main/context/UserContext';
 
 export default function NewProduct() {
-  const stateObject = useContext(ApplicationContext)
+  const applicationStateObject = useContext(ApplicationContext)
+  const stateObject = useContext(UserContext)
   let stocks = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
   let discounts = [0, 5, 10, 12, 15, 17, 20, 22, 25, 33]
   let colors = ['white', 'grey', 'black', 'red', 'green', 'blue', 'yellow']
@@ -45,7 +47,7 @@ export default function NewProduct() {
         return {
           ...prevData,
           shopId: event.target.value,
-          products: getProductList(stateObject.appData.publisherProducts, event.target.value)
+          products: getProductList(stateObject.userData.products, event.target.value)
         }
       })
     } else if (event.target.name.localeCompare('productId') === 0) {
@@ -74,7 +76,7 @@ export default function NewProduct() {
               <InputLabel>shop</InputLabel>
               <Select name='shopId' label='shop' onChange={handleChange} required variant='outlined'>
                 {
-                  stateObject.appData.shops.map(shop => {
+                  stateObject.userData.shops.map(shop => {
                     return <MenuItem value={shop.shopId} onChange={handleChange}>{shop.name}</MenuItem>
                   })
                 }
@@ -132,7 +134,7 @@ export default function NewProduct() {
               <InputLabel>tags</InputLabel>
               <Select name='tagId_id' label='tag' onChange={handleChange}>
                 {
-                  stateObject.appData.tags.map(tag => {
+                  applicationStateObject.appData.tags.map(tag => {
                     return <MenuItem value={tag.tagId}>{tag.tagName}</MenuItem>
                   })
                 }

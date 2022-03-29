@@ -9,11 +9,11 @@ import {
   Grid, TextField, Box, Button, fullWidth
 } from '@mui/material'
 import { useContext } from 'react';
-import ApplicationContext from '../../main/context/ApplicationContext';
+import UserContext from '../../main/context/UserContext';
 
 
 export default function NewShop() {
-  const stateObject = useContext(ApplicationContext)
+  const stateObject = useContext(UserContext)
   let [shopData, updateShop] = React.useState({
     name: '',
     pincode: '',

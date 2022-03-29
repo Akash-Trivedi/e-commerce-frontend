@@ -15,7 +15,7 @@ import About from './main/components/About'
 import Support from './main/components/Support'
 import Login from './utility/components/Login'
 import Signup from './utility/components/Signup'
-
+import UserState from './main/state/UserState'
 const websiteTitle = 'Vocal to Local'
 
 const customerLoginVariables = {
@@ -64,8 +64,10 @@ ReactDOM.render(
           <Route path='customer-signup' element={<Signup variables={customerSignupVariables} />} />
         </Route>
       </Routes>
-      <PublisherPrivateRoutes />
-      <CustomerPrivateRoutes />
+      <UserState>
+        <PublisherPrivateRoutes />
+        <CustomerPrivateRoutes />
+      </UserState>
     </BrowserRouter>
   </ApplicationState >,
   document.getElementById('root')

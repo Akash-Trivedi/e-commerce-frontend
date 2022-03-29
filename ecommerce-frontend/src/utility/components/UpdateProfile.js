@@ -5,7 +5,7 @@
  * caller-function: ecommerce-frontend\src\main\components\Header.js
  */
 import React, { useContext } from 'react'
-import ApplicationContext from '../../main/context/ApplicationContext'
+import UserContext from '../../main/context/UserContext'
 import {
   Button, TextField, Grid, Avatar, Box
 } from '@mui/material'
@@ -17,8 +17,8 @@ import { grey } from '@mui/material/colors'
 export default function UpdateProfile(props) {
   const avatarSize = 250;
   const link = props.link
-  const stateObject = useContext(ApplicationContext)
-  const u = stateObject.appData.userInfo
+  const stateObject = useContext(UserContext)
+  const u = stateObject.userData.userInfo
   let [formData, updateForm] = React.useState({
     first_name: u.first_name,
     last_name: u.last_name,

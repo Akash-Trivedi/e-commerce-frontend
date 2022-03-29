@@ -8,7 +8,7 @@
  import React from 'react'
  import { Route, Routes } from 'react-router-dom'
  
- import Dashboard from '../components/Dashboard'
+ import Dashboard from '../../main/components/Dashboard'
  import Profile from '../../utility/components/Profile'
  import UpdateProfile from '../../utility/components/UpdateProfile'
  import Feedbacks from '../components/Feedbacks'

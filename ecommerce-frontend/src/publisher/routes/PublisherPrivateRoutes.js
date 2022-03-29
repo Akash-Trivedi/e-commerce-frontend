@@ -12,7 +12,7 @@ import NewProduct from "../components/NewProduct"
 import NewShop from "../components/NewShop"
 import Products from "../components/Products"
 import UpdateProduct from "../components/UpdateProduct"
-import Dashboard from '../components/Dashboard'
+import Dashboard from '../../main/components/Dashboard'
 import Shops from '../components/Shops'
 import NotFound from '../../utility/components/NotFound'
 import Profile from '../../utility/components/Profile'

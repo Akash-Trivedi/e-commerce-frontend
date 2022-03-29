@@ -15,8 +15,8 @@ import {
 export default function Profile() {
   const [productData, updateProduct] = React.useState({})
   const location = useLocation();
-  let formData = location.state.publisherInfo;
-
+  let formData = location.state.customUserInfo;
+  
   function addProduct(event) {
     event.preventDefault()
     async function sendProduct(data) {
@@ -50,7 +50,7 @@ export default function Profile() {
               <em>None</em>
             </MenuItem>
             {
-              [].map(shop => {
+              formData.shops.map(shop => {
                 <MenuItem value={shop.shopId}>{shop.shopName}</MenuItem>
               })
             }

@@ -7,7 +7,7 @@
 import React from 'react'
 import {
   Grid, TextField, MenuItem, Select,
-  FormControl, InputLabel, Box, Button
+  FormControl, InputLabel, Box, Button, Input
 } from '@mui/material'
 import ApplicationContext from '../../main/context/ApplicationContext';
 import { useContext } from 'react';
@@ -16,11 +16,10 @@ import UserContext from '../../main/context/UserContext';
 export default function NewProduct() {
   const applicationStateObject = useContext(ApplicationContext)
   const stateObject = useContext(UserContext)
-  console.log(stateObject.userData)
   let stocks = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
   let discounts = [0, 5, 10, 12, 15, 17, 20, 22, 25, 33]
   let colors = [
-    'white', 'grey', 'black', 'red', 'green', 'blue', 'yellow'
+    'white', 'grey', 'black', 'red', 'green', 'blue', 'yellow', 'brown'
   ]
   const [product, updateProduct] = React.useState({
     name: '',
@@ -38,35 +37,22 @@ export default function NewProduct() {
   )
   function registerProduct(event) {
     event.preventDefault();
-    async function updateProduct(data) {
-      console.log(data);
-      let response = await fetch(`http://localhost:8000/api/product/add/`,
-        {
-          method: 'POST',
-          body: JSON.stringify(data),
-          headers: {
-            'Authorization': `JWT ${localStorage.getItem('access')}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        })
-      response = await response.json();
-      return response;
-    }
-    let response = updateProduct(product)
+
+    let response = updateProduct1(product)
     response.then(
       res => {
-        if (res.status === 201) {
+        console.log(res);
+        if (parseInt(res.status) === 201) {
           alert('new product added!')
           stateObject.updateUserData(
             prev => {
+              prev.products.push(res.product)
               return {
-                ...prev,
-                products: res.products
+                ...prev
               }
             }
           )
-        } else if (res.status === 409) {
+        } else if (parseInt(res.status) === 409) {
           alert('product already added')
         } else {
           alert('server encountered error')
@@ -85,17 +71,38 @@ export default function NewProduct() {
         }
       })
     }
-    updateProduct((prevData) => {
-      return {
-        ...prevData,
-        [event.target.name]: event.target.value
+
+    if (event.target.name.localeCompare('productImage') === 0) {
+      if (event.target.files.length === 1 && event.target.files[0].type.localeCompare('image/jpeg') === 0) {
+        updateProduct(p => {
+          return {
+            ...p,
+            file: event.target.files[0]
+          }
+        })
+      } else {
+        alert('selected file is invalid, choose only jpeg image format or it will be empty');
+        updateProduct(p => {
+          return {
+            ...p,
+            [event.target.name]: '',
+            file: null
+          }
+        })
       }
-    })
+    } else {
+      updateProduct((prevData) => {
+        return {
+          ...prevData,
+          [event.target.name]: event.target.value
+        }
+      })
+    }
   }
 
   return (
     <Box sx={{ p: 4, justifyContent: 'center', display: 'flex' }}>
-      <form onSubmit={registerProduct}>
+      <form onSubmit={registerProduct} method='POST' encType='multipart/form-data'>
         <Grid container direction='row' justifyContent='center' alignItems='center' spacing={2}>
 
           {/* single row */}
@@ -129,7 +136,7 @@ export default function NewProduct() {
 
           {/* third row */}
           <Grid item xs={2}>
-            <TextField fullWidth margin='normal' type='text' min='50' label='Price' onChange={handleChange} name='price' required />
+            <TextField fullWidth margin='normal' type='number' min='50' label='Price' onChange={handleChange} name='price' required />
           </Grid>
 
           <Grid item xs={2}>
@@ -185,11 +192,15 @@ export default function NewProduct() {
           </Grid>
 
           <Grid item xs={2}>
-            <TextField fullWidth margin='normal' type='text' min='50' className='form-control' label='Edition' onChange={handleChange} name='edition' />
+            <TextField fullWidth margin='normal' type='text' className='form-control' label='Edition' onChange={handleChange} name='edition' />
           </Grid>
 
           <Grid item xs={2}>
-            <TextField fullWidth margin='normal' type='text' min='50' className='form-control' label='Size' onChange={handleChange} name='size' />
+            <TextField fullWidth margin='normal' type='text' className='form-control' label='Size' onChange={handleChange} name='size' />
+          </Grid>
+
+          <Grid item xs={2}>
+            <input fullWidth margin='normal' type='file' className='form-control' onChange={handleChange} name='productImage' required />
           </Grid>
 
         </Grid>
@@ -201,4 +212,21 @@ export default function NewProduct() {
       </form>
     </Box>
   )
+}
+
+
+async function updateProduct1(data) {
+  data.price = parseInt(data.price)
+  console.log(data);
+  let response = await fetch(`http://127.0.0.1:8000/api/product/add/`,
+    {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Authorization': `JWT ${localStorage.getItem('access')}`,
+        'Content-Type': 'application/json'
+      }
+    })
+  response = await response.json();
+  return response;
 }

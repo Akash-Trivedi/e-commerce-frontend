@@ -6,17 +6,16 @@
  */
 import React, { useContext } from 'react'
 import {
-  Box, Grid, Rating, Button, Accordion, AccordionSummary, AccordionDetails, Typography
+  Box, Grid, Rating, Button
 } from '@mui/material'
 import UserContext from '../../main/context/UserContext'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 
 export default function Products(props) {
   console.log('publisher products are now rendered');
   const stateObject = useContext(UserContext)
   return (
-    <Grid container sx={{ p: 2 }}>
+    <Grid container sx={{ p: 2 }} gap={2}>
       {
         stateObject.userData.products.map(
           (product) => {
@@ -29,40 +28,49 @@ export default function Products(props) {
 }
 
 function SingleProduct(props) {
+  const stateObject = useContext(UserContext)
   const navigate = useNavigate()
   const product = props.product
+
   return (
-    <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-      <Accordion className='capitalize'>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2a-content" id={product.productId} sx={{ bgcolor: '#7F8C8D', color: 'white' }}>
-          <Typography sx={{px: 0}}>
-            {`${product.companyName}: ${product.name}`}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{ bgcolor: '#E0E0E0', color: 'black' }} >
-          <Typography sx={{p: 1}}>
-            {`Description: ${product.description}`}
-          </Typography>
-          <Typography sx={{p: 1}}>
-            {`price: ${product.price} off: ${product.discount}%`}
-          </Typography>
-          <Typography sx={{p: 1}}>
-            {`total reviews: ${product.totalFeedbacks}`}
-            <Rating name="simple-controlled" readOnly value={parseInt(product.feedBackValue)} size='small' />
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
+    <Grid item xs={2} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 250, minHeight: 350, maxWidth: 250, maxHeight: 350 }}>
+      <div className='rounded-md overflow-hidden shadow-lg hover:scale-105'>
+        <div>
+          <img alt='ecommerce' className='object-cover object-center w-full h-full' src='https://dummyimage.com/420x260' />
+        </div>
+        <div className='p-2 bg-white h-20 w-30'>
+          <h3 className='text-md font-semibold capitalize text-gray-900'>{product.companyName} {product.name + product.description}</h3>
+        </div>
+        <div className='px-2 bg-white font-semibold'>
+          <i>shop: </i>
+          <i>{getShopName(product.shopId, stateObject.userData.shops)}</i>
+        </div>
+        <div className='px-2 bg-white font-semibold'>
+          <i>reviews: </i>
+          <Rating name="simple-controlled" readOnly value={parseFloat(product.feedBackValue)} precision={0.5} />
+          <i>({product.totalFeedbacks})</i>
+        </div>
+        <div className='py-2 px-3 bg-white'>
+          <h3 className='text-sm font-semibold text-black'>
+            <i>price: &nbsp;</i>
+            <i className='text-lime-600'>&#8377;{product.price}</i>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <i>discount: &nbsp;</i>
+            <i className='text-lime-600'>{product.discount}%</i>
+          </h3>
+        </div>
+      </div>
     </Grid>
   )
 }
 
-// color: "white"
-// edition: "basic"
-// feedBackValue: 0
-// name: "1.5 tonne AC"
-// productId: 5
-// shopId: 7
-// size: "-"
-// stock: 5
-// tagId: 1
-// totalFeedbacks: 0
+
+function getShopName(shopid, list) {
+  let name
+  for (let i = 0; i < list.length; i++) {
+    if (list[i].shopId === shopid) {
+      name = list[i].name
+    }
+  }
+  return name
+}

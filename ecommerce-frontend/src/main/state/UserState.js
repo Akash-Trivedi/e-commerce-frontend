@@ -9,7 +9,8 @@ export default function UserState(props) {
     shops: [],
     feedbacks: [],
     products: [],
-    totalSales: 0
+    totalSales: 0,
+    userLoggedIn: false,
   })
   return (
     <UserContext.Provider value={{ userData, updateUserData }}>

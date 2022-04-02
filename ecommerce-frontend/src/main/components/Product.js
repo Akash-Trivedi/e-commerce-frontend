@@ -13,9 +13,10 @@ import {
 import ApplicationContext from '../context/ApplicationContext';
 
 export default function Product() {
-  let [product, setProduct] = React.useState({ product: null, feedbacks: null });
+  let [product, setProduct] = React.useState({ product: null, feedbacks: [] });
   let { productId } = useParams();
   const stateObject = useContext(ApplicationContext)
+  console.log(stateObject.appData.cart)
   let newPrice = null
   if (product.product !== null) {
     newPrice = product.product.price - (product.product.price * (product.product.discount / 100))
@@ -24,7 +25,10 @@ export default function Product() {
     let feeedbackPromise = getFeedbacks(productId)
     feeedbackPromise.then(
       res => {
-        setProduct(r => { return { ...r, feedbacks: res.feedbacks } })
+        setProduct((previousObject) => {
+          return { ...previousObject, feedbacks: res.feedbacks }
+        }
+        )
       }
     )
     feeedbackPromise.catch(err => { console.log(`some error occured while getting feedbacks: ${err}`) })
@@ -38,13 +42,13 @@ export default function Product() {
 
   function addToCart(event) {
     stateObject.updateAppData(
-      prev => {
+      previousObject => {
         return {
           cart: {
             userId: null,
-            products: prev.cart.products.push(product)
+            products: getModifiedObject(previousObject.cart.products, product.product)
           },
-          ...prev
+          ...previousObject
         }
       }
     )
@@ -65,7 +69,7 @@ export default function Product() {
                   <h2 className='text-gray-900 font-medium mb-1'>{product.product.name}</h2>
                   <div className='flex mb-4'>
                     <span className='flex items-center'>
-                      <Rating name='simple-controlled' readOnly value={parseInt(product.product.feedBackValue)} />
+                      <Rating name='simple-controlled' readOnly value={parseFloat(product.product.feedBackValue)} precision={0.5} />
                       <span className='text-gray-600 ml-3'>{product.product.totalFeedbacks} Reviews</span>
                     </span>
                   </div>
@@ -90,7 +94,7 @@ export default function Product() {
               </div>
             </div>
             <hr />
-            <Grid container gap={2} sx={{ py: 2, justifyContent: 'center', display: 'flex' }}>
+            <Grid container gap={2} sx={{ py: 2, justifyContent: 'center', display: 'flex' }} id='feedbacks'>
               {
                 product.feedbacks.map(
                   sf => {
@@ -102,7 +106,6 @@ export default function Product() {
           </section>
         )
       }
-
     </Box>
   );
 }
@@ -139,7 +142,7 @@ function CustomerFeedback(props) {
       <h2 className='sm:text-2xl text-xl title-font font-medium text-gray-900 mb-2 capitalize'>{f.heading}</h2>
       <p className='leading-relaxed px-2'><i>{f.review}</i></p>
       <p className='leading-relaxed px-1'>
-        <Rating name='read-only' value={parseInt(f.starValue)} readOnly />
+        <Rating name='read-only' value={parseFloat(f.starValue)} readOnly precision={0.5} />
       </p>
       <p className='leading-relaxed px-2'>
         <i><strong>dated:</strong> {f.timeStamp.slice(0, 10)}</i>
@@ -147,3 +150,28 @@ function CustomerFeedback(props) {
     </Grid>
   )
 }
+
+function getModifiedObject(cartItemList = [], productObject) {
+
+  let currentQuantity = 0
+
+  for (let i = 0; i < cartItemList.length; i++) {
+    if (parseInt(cartItemList[i].productId) === parseInt(productObject.productId)) {
+      currentQuantity = parseInt(cartItemList[i].quantity)
+      break
+    }
+  }
+
+  if (currentQuantity === 0) {
+    // item was new to the list
+    productObject.quantity = ++currentQuantity
+    cartItemList.push(productObject)
+  } else {
+    productObject.quantity = ++currentQuantity
+  }
+  return cartItemList
+}
+
+/**
+ * 
+ */

@@ -14,11 +14,12 @@ import UserContext from '../../main/context/UserContext';
 
 
 export default function Dashboard() {
+  console.log('dashboard called');
   let sideNavContent = null
   const navigate = useNavigate()
   const stateObject = useContext(UserContext)
   console.log(stateObject.userData);
-  if (localStorage.getItem('userLoggedIn').localeCompare('0') === 0 || localStorage.getItem('userType').localeCompare('0') === 0) {
+  if (localStorage.getItem('userLoggedIn').localeCompare('0') === 0) {
     navigate('/homepage')
   }
   if (localStorage.getItem('userType').localeCompare('1') === 0) {
@@ -38,7 +39,10 @@ export default function Dashboard() {
   } else {
     sideNavContent = {
       name: [
-        ['dashboard', 'profile'], ['feedbacks', 'feedbacks'], ['order history', 'order-history'], ['update profile', 'update-profile'],
+        ['dashboard', 'profile'],
+        ['feedbacks', 'feedbacks'],
+        ['order history', 'order-history'],
+        ['update profile', 'update-profile'],
       ]
     }
   }
@@ -48,7 +52,6 @@ export default function Dashboard() {
     promise.then(
       response => {
         stateObject.updateUserData(prev => {
-          console.log(response)
           return {
             ...response.data
           }
@@ -67,6 +70,11 @@ export default function Dashboard() {
     stateObject.updateUserData(
       prev => {
         return {
+          userInfo: {},
+          shops: [],
+          feedbacks: [],
+          products: [],
+          totalSales: 0,
           userLoggedIn: false
         }
       }
@@ -105,27 +113,29 @@ export default function Dashboard() {
             <Grid item xs={12}>
               <Grid container spacing={0} sx={{ p: 0 }}>
                 <header className="w-full shadow-lg bg-white dark:bg-gray-700 items-center h-16">
-                  {
-                    parseInt(localStorage.getItem('userType')) !== 1 ?
-                      true : (
-                        <div className="flex items-center justify-end p-2 mr-4 sm:mr-0 sm:right-auto">
-                          <Grid item xs={4} sx={{ px: 2 }}>
-                            <span>Shops Registered: <span className='text-lime-500 font-semibold'>{stateObject.userData.shops.length}</span></span>
-                          </Grid>
-                          <Grid item xs={4}>
-                            <span>product registered: <span className='text-lime-500 font-semibold'> &#8377; {stateObject.userData.products.length}</span>&nbsp;&nbsp;</span>
-                          </Grid>
-                          <Grid item xs={4}>
-                            <span>Overall Sales: <span className='text-lime-500 font-semibold'> &#8377; {stateObject.userData.totalSales}</span>&nbsp;&nbsp;</span>
-                          </Grid>
-                          <Grid item xs={2}>
-                            <form onSubmit={logout}>
-                              <Button color='primary' variant='contained' disableElevation type='submit'>logout</Button>
-                            </form>
-                          </Grid>
-                        </div>
-                      )
-                  }
+                  <div className="flex items-center justify-end p-2 mr-4 sm:mr-0 sm:right-auto">
+                    {
+                      parseInt(localStorage.getItem('userType')) !== 1 ?
+                        true : (
+                          <>
+                            <Grid item xs={3} sx={{ px: 2 }}>
+                              <span>Shops Registered: <span className='text-lime-500 font-semibold'>{stateObject.userData.shops.length}</span></span>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <span>product registered: <span className='text-lime-500 font-semibold'> &#8377; {stateObject.userData.products.length}</span>&nbsp;&nbsp;</span>
+                            </Grid>
+                            <Grid item xs={3}>
+                              <span>Overall Sales: <span className='text-lime-500 font-semibold'> &#8377; {stateObject.userData.totalSales}</span>&nbsp;&nbsp;</span>
+                            </Grid>
+                          </>
+                        )
+                    }
+                    <Grid item xs={2}>
+                      <form onSubmit={logout}>
+                        <Button color='primary' variant='contained' disableElevation type='submit'>logout</Button>
+                      </form>
+                    </Grid>
+                  </div>
                 </header>
               </Grid>
             </Grid>

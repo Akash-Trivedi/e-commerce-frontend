@@ -17,6 +17,7 @@ export default function Homepage() {
   const stateObject = useContext(ApplicationContext)
   const products = stateObject.appData.products
   let [currentPage, setCurrentPage] = React.useState(0)
+  console.log(stateObject.appData)
   return (
     <section className='text-gray-600 body-font'>
       <Box sx={{ p: 3 }}>
@@ -35,3 +36,4 @@ export default function Homepage() {
   );
 }
 {/* <Pagination count={10} shape="rounded" sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} /> */}
+

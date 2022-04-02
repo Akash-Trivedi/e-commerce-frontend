@@ -4,66 +4,64 @@
  * functionality: render the feedbacks of the users related to publishers products
  * caller-function: ecommerce-frontend\src\publisher\components\Dashboard.js
  */
-import React from 'react'
+import React, { useContext } from 'react'
 import {
-  Rating
+  Rating, Box, Grid
 } from '@mui/material'
+import UserContext from '../../main/context/UserContext'
+import ApplicationContext from '../../main/context/ApplicationContext'
 
 
 export default function Feedbacks() {
-  let [feedbacks, setFeedbacks] = React.useState([])
-  React.useEffect(() => {
-    async function getFeedbacks() {
-      let response = await fetch('http://127.0.0.1:8000/api/customer/feedback/list-all/', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      })
-      response = await response.json()
-      return response
-    }
-    let f = getFeedbacks()
-    f.then(res => {
-      setFeedbacks(res.payload)}
-      )
-    f.catch(err => console.log('error encountered'))
-  }, [])
+  const stateObject = useContext(UserContext)
+  const applicationStateObject = useContext(ApplicationContext)
+  const feedbacks = stateObject.userData.feedbacks
+  const products = applicationStateObject.appData.products
+  console.log(stateObject)
 
   return (
-    <section className="pb-6 lg:pb-10 bg-[#F3F4F6]">
-      <div className="container">
-        <div className="flex flex-wrap -mx-4">
-          {/* single feedback block */}
-          {
-            feedbacks.map(f => {
-              return <FeedbackBlock data={f} key={f.feedbackId} />
-            })
-          }
-        </div>
-      </div>
-    </section>
+    <Box sx={{ p: 4, justifyContent: 'center', display: 'flex' }}>
+      <Grid container gap={2}>
+        {
+          feedbacks.length === 0 ? true :
+            (feedbacks.map((f) => {
+              return <FeedbackBlock data={f} list={products} key={f.feedbackId} />
+            }))
+        }
+      </Grid>
+    </Box>
   )
 }
 
+
 function FeedbackBlock(props) {
-  /**
-   * 
-   */
-  let feedbacks = props.data
+  let f = props.data
+  let list = props.list
   return (
-    <div className="w-full md:w-1/2 xl:w-1/3 px-4">
-      <div className="bg-white rounded-lg overflow-hidden mb-2">
-        <div className="p-8 sm:p-9 md:p-7 xl:p-4 text-center">
-          <p className="text-base text-body-color leading-relaxed mb-7">
-            {feedbacks.review}
-          </p>
-          <div className="flex items-center">
-            <Rating name="read-only" value={feedbacks.starValue} readOnly />
-          </div>
-        </div>
-      </div>
-    </div>
+    <Grid item xs={4} sx={{ p: 2, justifyContent: 'center', flexDirection: 'column', display: 'flex', minWidth: 250, minHeight: 250, maxWidth: 250, maxHeight: 350, bgcolor: '#F5F5F5', borderRadius: 10 }}>
+      <h2 className='sm:text-xl text-xl title-font font-medium text-gray-900 mb-2 capitalize'>
+        {f.heading}</h2>
+      <h2 className='sm:text-l text-l title-font font-medium text-gray-900 mb-2 capitalize'>
+        <i>Product: {getProduct(f.productId, list).name}</i>
+      </h2>
+      <p className='leading-relaxed px-2'><i>{f.review}</i></p>
+      <p className='leading-relaxed px-1'>
+        <Rating name='read-only' value={parseFloat(f.starValue)} readOnly precision={0.5} />
+      </p>
+      <p className='leading-relaxed px-2'>
+        <i><strong>dated:</strong> {f.timeStamp.slice(0, 10)}</i>
+      </p>
+    </Grid>
   )
+}
+
+function getProduct(id, list) {
+  let product = null;
+  for (let index = 0; index < list.length; index++) {
+    if (list[index].productId === id) {
+      product = list[index]
+      break
+    }
+  }
+  return product;
 }

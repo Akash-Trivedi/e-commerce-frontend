@@ -20,7 +20,7 @@
      <Routes>
        <Route path='customer-dashboard/' element={<Dashboard />}>
          <Route path='profile' element={<Profile />} />
-         <Route path='feedback' element={<Feedbacks />} />
+         <Route path='feedbacks' element={<Feedbacks />} />
          <Route path='update-profile' element={<UpdateProfile link={'http://localhost:8000/api/customer/publisher-update-profile/'} />} />
        </Route>
      </Routes>

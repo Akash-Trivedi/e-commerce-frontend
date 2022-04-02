@@ -17,10 +17,10 @@ export default function NewProduct() {
   const stateObject = useContext(UserContext)
   let stocks = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
   let discounts = [0, 5, 10, 12, 15, 17, 20, 22, 25, 33]
-  let colors = ['white', 'grey', 'black', 'red', 'green', 'blue', 'yellow']
+  let colors = ['white', 'grey', 'black', 'red', 'green', 'blue', 'yellow', 'brown']
   let [product, updateProduct] = React.useState({
-    name: '',
     products: [],
+    name: '',
     companyName: '',
     description: '',
     stock: '0',
@@ -29,40 +29,51 @@ export default function NewProduct() {
     color: '',
     discount: '0',
     edition: '-',
-    shopId_id: '',
-    tagId_id: ''
+    shopId: '',
+    tagId: ''
+
   })
+
+  console.log(product);
 
   function updateProductOnServer(event) {
     event.preventDefault();
-
-    let response = updateInventory(product)
-      .then((response) => console.log(response))
-      .catch((error) => console.error("error is: " + error));
+    console.log(product)
+    let promise = updateInventory(product)
+    promise.then((response) => console.log('updated product is :'))
+    promise.then((response) => console.log(response))
+    promise.catch((error) => console.error("error is: " + error));
   }
 
   function handleChange(event) {
+
     if (event.target.name.localeCompare('shopId') === 0) {
       updateProduct((prevData) => {
         return {
           ...prevData,
-          shopId: event.target.value,
           products: getProductList(stateObject.userData.products, event.target.value)
         }
       })
-    } else if (event.target.name.localeCompare('productId') === 0) {
-      updateProduct(
-        prev => {
-          return getProductInfo(product.products, event.target.value, prev)
-        }
-      )
     }
-    updateProduct((prevData) => {
-      return {
-        ...prevData,
-        [event.target.name]: event.target.value
+
+    else if (event.target.name.localeCompare('productId') === 0) {
+      updateProduct(prev => {
+        console.log(prev)
+        return {
+          ...prev,
+          ...getProductInfo(product.products, event.target.value)
+        }
       }
-    })
+      )
+    } else {
+
+      updateProduct((prevData) => {
+        return {
+          ...prevData,
+          [event.target.name]: event.target.value
+        }
+      })
+    }
   }
 
   return (
@@ -132,7 +143,7 @@ export default function NewProduct() {
           <Grid item xs={2}>
             <FormControl fullWidth margin='normal' >
               <InputLabel>tags</InputLabel>
-              <Select name='tagId_id' label='tag' onChange={handleChange}>
+              <Select name='tagId' label='tag' onChange={handleChange}>
                 {
                   applicationStateObject.appData.tags.map(tag => {
                     return <MenuItem value={tag.tagId}>{tag.tagName}</MenuItem>
@@ -185,26 +196,27 @@ function getProductList(list, id) {
   return filteredList;
 }
 
-function getProductInfo(productList, id, prev) {
-  let productInfo = {}
+function getProductInfo(productList, id) {
+  let productInfo
+  console.log(`product list is : ${productList}`)
   for (let index = 0; index < productList.length; index++) {
     if (productList[index].productId === id) {
       console.log(productList[index])
       productInfo = productList[index]
     }
   }
-
-  return {
-    ...prev,
-    ...productInfo
-  }
+  console.log(`info from function : ${productInfo}`)
+  return productInfo
 }
 
 async function updateInventory(data) {
+  data.price = parseInt(data.price)
+  console.log(data.price);
   let response = await fetch(`http://localhost:8000/api/product/update/`, {
-    method: 'POST',
+    method: 'PUT',
     body: JSON.stringify(data),
     headers: {
+      'Authorization': `JWT ${localStorage.getItem('access')}`,
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }

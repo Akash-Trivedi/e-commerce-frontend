@@ -17,7 +17,7 @@
         "terminal.integrated.fontFamily": "Inconsolata",
         "terminal.integrated.cursorStyle": "line",
         "terminal.integrated.cursorBlinking": true,
-        "workbench.colorTheme": "Gruvbox Dark Hard",
+        "workbench.colorTheme": "Atom One Light",
         "editor.glyphMargin": false,
         "editor.fontLigatures": true,
         "editor.defaultFormatter": "vscode.typescript-language-features",

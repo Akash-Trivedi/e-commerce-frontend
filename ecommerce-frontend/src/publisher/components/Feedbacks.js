@@ -6,14 +6,15 @@
  */
 import React, { useContext } from 'react'
 import {
-  Rating, Box, Grid, Accordion, AccordionSummary, AccordionDetails, Typography
+  Rating, Box, Grid
 } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import UserContext from '../../main/context/UserContext'
+
 
 export default function Feedbacks() {
   const stateObject = useContext(UserContext)
   const feedbacks = stateObject.userData.feedbacks
+  
   return (
     <Box sx={{ p: 4, justifyContent: 'center', display: 'flex' }}>
       <Grid container gap={2}>
@@ -28,29 +29,24 @@ export default function Feedbacks() {
   )
 }
 
+
 function FeedbackBlock(props) {
-  let feedback = props.data
+  let f = props.data
   let list = props.list
   return (
-    <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-      <Accordion className='capitalize'>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2a-content" id={feedback.feedbackId} sx={{ bgcolor: '#546E7A', color: 'white' }}>
-          <Typography>
-            {`${feedback.heading}`}
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{ bgcolor: '#E0E0E0', color: 'black' }} >
-          <Typography>
-            {`product: ${getProduct(feedback.productId, list).name}`}
-          </Typography>
-          <Typography>
-            {`review: ${feedback.review}`}
-          </Typography>
-          <Typography>
-            <Rating name="read-only" value={feedback.starValue} readOnly />
-          </Typography>
-        </AccordionDetails>
-      </Accordion>
+    <Grid item xs={4} sx={{ p: 2, justifyContent: 'center', flexDirection: 'column', display: 'flex', minWidth: 250, minHeight: 250, maxWidth: 250, maxHeight: 350, bgcolor: '#F5F5F5', borderRadius: 10 }}>
+      <h2 className='sm:text-xl text-xl title-font font-medium text-gray-900 mb-2 capitalize'>
+        {f.heading}</h2>
+      <h2 className='sm:text-l text-l title-font font-medium text-gray-900 mb-2 capitalize'>
+        <i>Product: {getProduct(f.productId, list).name}</i>
+      </h2>
+      <p className='leading-relaxed px-2'><i>{f.review}</i></p>
+      <p className='leading-relaxed px-1'>
+        <Rating name='read-only' value={parseFloat(f.starValue)} readOnly precision={0.5} />
+      </p>
+      <p className='leading-relaxed px-2'>
+        <i><strong>dated:</strong> {f.timeStamp.slice(0, 10)}</i>
+      </p>
     </Grid>
   )
 }

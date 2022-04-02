@@ -27,13 +27,16 @@ export default function UpdateProfile(props) {
     address: u.address,
     pincode: u.pincode,
     city: u.city,
-    state: u.state
+    state: u.state,
+    profilePhoto: u.profilePhoto,
+    file: {}
   })
+
 
   function updateProfile(event) {
     event.preventDefault();
 
-    let promise = updateDetails(formData, props.userType)
+    let promise = updateDetails(formData, localStorage.getItem('userType'))
     promise.then(
       res => {
         if (res.status === 201) {
@@ -127,7 +130,7 @@ export default function UpdateProfile(props) {
           </div>
         </Grid>
         <Grid item xs={5} sx={{ justifyContent: 'center', display: 'flex' }}>
-          <form onSubmit={updateProfile} className='capitalize'>
+          <form onSubmit={updateProfile} className='capitalize' encType='multipart/form-data'>
             <div className='grid grid-cols-2 gap-4'>
               <TextField label='first name' onChange={handleChange} type='text' value={formData.first_name} name='first_name' margin='normal' />
               <TextField label='last name' onChange={handleChange} type='text' value={formData.last_name} name='last_name' margin='normal' />
@@ -172,7 +175,7 @@ async function getLocation(pincode) {
 async function updateDetails(data, userType) {
   console.log(data)
   let link = ''
-  if (userType === 1) {
+  if (parseInt(userType) === 1) {
     link = 'http://127.0.0.1:8000/api/publisher/profile/update/'
   } else {
     link = 'http://127.0.0.1:8000/api/customer/profile/update/'
@@ -183,7 +186,7 @@ async function updateDetails(data, userType) {
     headers: {
       'Authorization': `JWT ${localStorage.getItem('access')}`,
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
     }
   })
   response = await response.json();

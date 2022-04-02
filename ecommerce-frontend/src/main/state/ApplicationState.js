@@ -10,7 +10,7 @@ export default function ApplicationState(props) {
     products: [],
     cart: {
       userId: null,
-      products: []
+      products: [],
     },
     userLoggedIn: 0,
     userType: 0,
@@ -47,7 +47,14 @@ export default function ApplicationState(props) {
       return response;
     }
     let tags = getTags()
-    tags.then(res => setTags(res))
+    tags.then(
+      res => {
+        if(res.status===200){
+          setTags(res.data)
+        } else{
+          setTags(res.data)
+        }
+      })
     tags.catch(
       (error) => {
         console.log('error encountered in tags was: ', error);

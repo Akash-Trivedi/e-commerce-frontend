@@ -3,6 +3,7 @@
  * date-created: 19-march-2022
  * functionality: render the feedbacks of the users related to publishers products
  * caller-function: ecommerce-frontend\src\publisher\components\Dashboard.js
+ * performs-network-request: false
  */
 import React, { useContext } from 'react'
 import {
@@ -10,29 +11,6 @@ import {
 } from '@mui/material'
 import UserContext from '../../main/context/UserContext'
 import ApplicationContext from '../../main/context/ApplicationContext'
-
-
-export default function Feedbacks() {
-  const stateObject = useContext(UserContext)
-  const applicationStateObject = useContext(ApplicationContext)
-  const feedbacks = stateObject.userData.feedbacks
-  const products = applicationStateObject.appData.products
-  console.log(stateObject)
-
-  return (
-    <Box sx={{ p: 4, justifyContent: 'center', display: 'flex' }}>
-      <Grid container gap={2}>
-        {
-          feedbacks.length === 0 ? true :
-            (feedbacks.map((f) => {
-              return <FeedbackBlock data={f} list={products} key={f.feedbackId} />
-            }))
-        }
-      </Grid>
-    </Box>
-  )
-}
-
 
 function FeedbackBlock(props) {
   let f = props.data
@@ -64,4 +42,24 @@ function getProduct(id, list) {
     }
   }
   return product;
+}
+export default function Feedbacks() {
+  const stateObject = useContext(UserContext)
+  const applicationStateObject = useContext(ApplicationContext)
+  const feedbacks = stateObject.userData.feedbacks
+  const products = applicationStateObject.appData.products
+  console.log(stateObject)
+
+  return (
+    <Box sx={{ p: 4, justifyContent: 'center', display: 'flex' }}>
+      <Grid container gap={2}>
+        {
+          feedbacks.length === 0 ? true :
+            (feedbacks.map((f) => {
+              return <FeedbackBlock data={f} list={products} key={f.feedbackId} />
+            }))
+        }
+      </Grid>
+    </Box>
+  )
 }

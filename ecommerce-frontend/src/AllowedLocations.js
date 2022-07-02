@@ -1,3 +1,10 @@
+/**
+ * author: akash trivedi
+ * date-created: 
+ * functionality: 
+ * caller-function: 
+ * performs-network-request: false
+ */
 let locations = {
   "data": {
     "Gujarat": ["Ahmedabad", "Rajkot", "Surat", "Gandhi Nagar"],

@@ -3,7 +3,9 @@
  * date-created: 17-march-2022
  * functionality: render the content/ page not found component
  * caller-function: ecommerce-frontend\src\index.js
+ * performs-network-request: false
  */
+
 import React from 'react'
 import { Link } from 'react-router-dom'
 

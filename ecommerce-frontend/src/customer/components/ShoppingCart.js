@@ -3,6 +3,7 @@
  * date-created: 10-march-2022
  * functionality: display the shopping cart with content
  * caller-function: ecommerce-frontend\src\index.js
+ * performs-network-request: false
  */
 import React, { useContext } from 'react'
 import ApplicationContext from '../../main/context/ApplicationContext';
@@ -72,6 +73,20 @@ function Cart(props) {
     )
   }
 
+  function removeProduct(event) {
+    stateObject.updateAppData(
+      (previousObject) => {
+        return {
+          ...previousObject,
+          cart: {
+            userId: null,
+            products: removeItem(previousObject.cart.products, event.target.name)
+          }
+        }
+      }
+    )
+  }
+
   function checkOut(event) {
     if (stateObject.appData.cart.userId === null) {
       alert('please log in to complete the order')
@@ -85,9 +100,9 @@ function Cart(props) {
           {
             items.map(item => {
               return (
-                <Grid item xs={12} sx={{ p: 5, bgcolor: '#F5F5F5', borderRadius: 7 }}>
+                <Grid item xs={12} sx={{ p: 3, bgcolor: '#F5F5F5', borderRadius: 7 }}>
                   <Grid container>
-                    <Grid item xs={5}>
+                    <Grid item xs={4}>
                       <span className='text-xl font-medium text-gray-900 title-font mb-2'>
                         {item.companyName + ' : ' + item.name}
                       </span>
@@ -99,8 +114,12 @@ function Cart(props) {
                         <Button variant='contained' id={item.productId} color='primary' onClick={incrementQuantity}><strong>+</strong></Button>
                       </span>
                     </Grid>
-                    <Grid item xs={3} sx={{ mt: 0.5, justifyContent: 'center', display: 'flex' }}>
+                    <Grid item xs={1} sx={{ mt: 0.5, justifyContent: 'center', display: 'flex' }}>
                       <span className='leading-relaxed font-semibold'>total: &#8377;{item.price * item.quantity}</span>
+                    </Grid>
+                    <Grid item xs={3} sx={{ justifyContent: 'center', display: 'flex' }}>
+                      <Button variant='outlined' name={item.productId} color='error' size='small' onClick={removeProduct}><strong>remove</strong>
+                      </Button>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -135,4 +154,17 @@ function getModifiedList(cartItemList, productId, incrementQuantity) {
     }
   }
   return cartItemList
+}
+
+function removeItem(cartItemList, productId) {
+  console.log(`to remove item number: ${productId}`);
+  console.log(`to remove from: ${cartItemList}`);
+  let newList = []
+  for (let i = 0; i < cartItemList.length; i++) {
+    if (parseInt(cartItemList[i].productId) === parseInt(productId)) {
+      continue
+    }
+    newList.push(cartItemList[i])
+  }
+  return newList
 }

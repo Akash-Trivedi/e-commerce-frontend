@@ -3,6 +3,7 @@
  * date-created: 19-march-2022
  * functionality: render the feedbacks of the users related to publishers products
  * caller-function: ecommerce-frontend\src\publisher\components\Dashboard.js
+ * performs-network-request: false
  */
 import React, { useContext } from 'react'
 import {
@@ -14,7 +15,7 @@ import UserContext from '../../main/context/UserContext'
 export default function Feedbacks() {
   const stateObject = useContext(UserContext)
   const feedbacks = stateObject.userData.feedbacks
-  
+
   return (
     <Box sx={{ p: 4, justifyContent: 'center', display: 'flex' }}>
       <Grid container gap={2}>

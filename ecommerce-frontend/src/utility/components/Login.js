@@ -3,6 +3,7 @@
  * date-created: 10-march-2022
  * functionality: render the login page for the given user to login
  * caller-function: ecommerce-frontend\src\App.js
+ * performs-network-request: true
  */
 
 import React from 'react';
@@ -12,6 +13,8 @@ import {
 } from '@mui/material';
 import { useContext } from 'react'
 import ApplicationContext from '../../main/context/ApplicationContext'
+
+const { baseUrl } = useContext(ApplicationContext).appData
 
 /**
  * generalized login page, can be used for both publisher and customer
@@ -144,7 +147,7 @@ export default function Login(props) {
 
 function login(data) {
   async function loginInside(data) {
-    let response = await fetch('http://127.0.0.1:8000/api/publisher/login/', {
+    let response = await fetch(`${baseUrl}publisher/login/`, {
       body: JSON.stringify(data),
       method: 'POST',
       headers: {
@@ -162,7 +165,7 @@ function login(data) {
 
 function refresh(data) {
   async function refreshIndside(data) {
-    let response = await fetch('http://127.0.0.1:8000/api/token/', {
+    let response = await fetch(`${baseUrl}token/`, {
       body: JSON.stringify(data),
       method: 'POST',
       headers: {

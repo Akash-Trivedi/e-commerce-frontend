@@ -3,6 +3,7 @@
  * date-created: 8-march-2022
  * functionality: render the publisher's profile
  * caller-function: ecommerce-frontend\src\publisher\routes\PublisherPrivateRoutes.js
+ * performs-network-request: true
  */
 import React from 'react'
 import { useLocation } from 'react-router-dom';
@@ -11,12 +12,13 @@ import {
   FormControl, InputLabel, Box, Button
 } from '@mui/material'
 
+const { baseUrl } = useContext(ApplicationContext).appData
 
 export default function Profile() {
   const [productData, updateProduct] = React.useState({})
   const location = useLocation();
   let formData = location.state.customUserInfo;
-  
+
   function addProduct(event) {
     event.preventDefault()
     async function sendProduct(data) {

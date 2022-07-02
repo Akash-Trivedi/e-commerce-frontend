@@ -3,6 +3,7 @@
  * date-created: 19-march-2022
  * functionality: render the publisher's profile
  * caller-function: ecommerce-frontend\src\publisher\routes\PublisherPrivateRoutes.js
+ * performs-network-request: false
  */
 import React from 'react'
 import { useContext } from 'react'
@@ -21,7 +22,7 @@ export default function Profile() {
 
   let address = `${formData.address}, ${formData.pincode}, ${formData.city}, ${formData.state}`
   return (
-    <Box sx={{p:4}}>
+    <Box sx={{ p: 4 }}>
       <Grid container spacing={2}>
         <Grid item xs={5} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <div>

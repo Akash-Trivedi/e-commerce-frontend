@@ -3,6 +3,7 @@
  * date-created: 16-feb-2022
  * usage: render the single product preview on the homepage from the data recieved.
  * caller function: src/main/components/Main.js
+ * performs-network-request: false
  */
 
 import React from 'react';
@@ -12,14 +13,16 @@ import {
 } from '@mui/material'
 
 export default function ProductPreview(props) {
+
   const product = props.product
   const newPrice = product.price - (product.price * (product.discount / 100))
+
   return (
     <Grid item xs={3} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minWidth: 250, minHeight: 400, maxWidth: 250, maxHeight: 400 }}>
       <div className='rounded-md overflow-hidden shadow-lg hover:scale-105 transition duration-750 cursor-pointer'>
         <NavLink to={`/product/${product.productId}/`} key={product.productId}>
           <div>
-            <img alt='ecommerce' className='object-cover object-center w-full h-full' src={product.photo} />
+            <img alt='ecommerce' className='object-cover object-center' src='https://reactjsexample.com/content/images/2016/08/20160828182925.jpg' />
           </div>
           <div className='p-2 bg-white h-20 w-30'>
             <h3 className='text-md font-semibold capitalize text-gray-900'>{product.companyName} {product.name + product.description}</h3>

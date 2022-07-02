@@ -3,8 +3,11 @@
  * date-created: 6-march-2022
  * functionality: render the page for password creation
  * caller-function: ecommerce-frontend\src\publisher\components\Register.js
+ * performs-network-request: true
  */
 import React from 'react'
+
+const { baseUrl } = useContext(ApplicationContext).appData
 
 export default function CreatePassword(props) {
   /**
@@ -21,13 +24,13 @@ export default function CreatePassword(props) {
 
       console.log("waiting for fetch to complete");
       try {
-        let response = await fetch('http://127.0.0.1:8000/api/register-cutomer/', {
+        let response = await fetch(`${baseUrl}register-cutomer/`, {
           method: "POST",
           type: "cors",
           body: `{
-            "contact": "8980702003",
-            "password": "1234"
-          }`,
+          "contact": "8980702003",
+          "password": "1234"
+        }`,
           headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"

@@ -3,6 +3,7 @@
  * date-created: 17-march-2022
  * functionality: renders new product form
  * caller-function: ecommerce-frontend\src\index.js
+ * performs-network-request: true
  */
 import React, { useContext } from 'react'
 import {
@@ -11,6 +12,8 @@ import {
 } from '@mui/material'
 import ApplicationContext from '../../main/context/ApplicationContext';
 import UserContext from '../../main/context/UserContext';
+
+const { baseUrl } = useContext(ApplicationContext).appData
 
 export default function NewProduct() {
   const applicationStateObject = useContext(ApplicationContext)
@@ -212,7 +215,7 @@ function getProductInfo(productList, id) {
 async function updateInventory(data) {
   data.price = parseInt(data.price)
   console.log(data.price);
-  let response = await fetch(`http://localhost:8000/api/product/update/`, {
+  let response = await fetch(`${baseUrl}product/update/`, {
     method: 'PUT',
     body: JSON.stringify(data),
     headers: {

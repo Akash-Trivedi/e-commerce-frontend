@@ -3,6 +3,7 @@
  * date-created: 16-feb-2022
  * usage: render the product chosen from the the home page/any other page
  * caller function: ecommerce-frontend/src/main/components/ProductPreview.js
+ * performs-network-request: true
  */
 
 import React, { useContext } from 'react';
@@ -11,6 +12,8 @@ import {
   Rating, Box, Grid
 } from '@mui/material'
 import ApplicationContext from '../context/ApplicationContext';
+
+const { baseUrl } = useContext(ApplicationContext).appData
 
 export default function Product() {
   let [product, setProduct] = React.useState({ product: null, feedbacks: [] });
@@ -111,7 +114,7 @@ export default function Product() {
 }
 
 async function getProduct(id) {
-  let response = await fetch(`http://localhost:8000/api/product/${id}/`,
+  let response = await fetch(`${baseUrl}product/${id}/`,
     {
       method: 'GET',
       'Content-Type': 'application/json'
@@ -121,7 +124,7 @@ async function getProduct(id) {
 }
 
 async function getFeedbacks(productId) {
-  const link = `http://localhost:8000/api/product/feedbacks/${productId}/`
+  const link = `${baseUrl}product/feedbacks/${productId}/`
   let response = await fetch(
     link, {
     method: 'GET',
@@ -171,7 +174,3 @@ function getModifiedObject(cartItemList = [], productObject) {
   }
   return cartItemList
 }
-
-/**
- * 
- */

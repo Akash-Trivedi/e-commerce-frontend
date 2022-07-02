@@ -4,6 +4,7 @@
  * usage: render the shopping cart
  * caller function: ecommerce-frontend/src/main/components/Header.js
  * bifercating remaining for the customer vs publisher's account login
+ * performs-network-request: false
  */
 
 import React from "react";

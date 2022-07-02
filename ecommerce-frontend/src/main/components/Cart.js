@@ -3,14 +3,15 @@
  * date-created: 16-feb-2022
  * usage: render the shopping cart
  * caller function: ecommerce-frontend/src/main/components/Header.js
+ * performs-network-request: false
  */
 
-function Cart(props){
-    const props=props.list;
+function Cart(props) {
+  const props = props.list;
 
-    return(
-        {}
-    );
+  return (
+    {}
+  );
 }
 
 export default Cart;

@@ -3,6 +3,7 @@
  * date-created: 16-feb-2022
  * usage: render all the product preview on the homepage
  * caller function: ecommerce-frontend/src/App.js
+ * performs-network-request: true
  */
 
 import React, { useContext } from 'react';
@@ -13,6 +14,8 @@ import { useParams } from 'react-router-dom';
 import ProductPreview from './ProductPreview';
 import ApplicationContext from '../context/ApplicationContext';
 
+const { baseUrl } = useContext(ApplicationContext).appData
+
 export default function Homepage() {
   const stateObject = useContext(ApplicationContext)
   let { tagId } = useParams();
@@ -21,7 +24,7 @@ export default function Homepage() {
 
   React.useEffect(
     () => {
-      fetch(`http://localhost:8000/api/product/tag/${tagId}/`,
+      fetch(`${baseUrl}product/tag/${tagId}/`,
         {
           method: 'GET',
           headers: {

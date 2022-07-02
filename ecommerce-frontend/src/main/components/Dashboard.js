@@ -3,6 +3,7 @@
  * date-created: 10-march-2022
  * functionality: render the dashboard for the pubsliher
  * caller-function: 
+ * performs-network-request: false
  */
 import React from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
@@ -14,7 +15,6 @@ import UserContext from '../../main/context/UserContext';
 
 
 export default function Dashboard() {
-  console.log('dashboard called');
   let sideNavContent = null
   const navigate = useNavigate()
   const stateObject = useContext(UserContext)

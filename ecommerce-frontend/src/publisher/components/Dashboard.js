@@ -73,7 +73,7 @@ export default function Dashboard() {
   }
 
   return (
-    <Box sx={{ minWidth: 400, bgcolor: 'white'}}>
+    <Box sx={{ minWidth: 400, bgcolor: 'white' }}>
       <Grid container spacing={0}>
 
         {/* left side */}
@@ -104,7 +104,7 @@ export default function Dashboard() {
               <Grid container spacing={0} sx={{ p: 0 }}>
                 <header className="w-full shadow-lg bg-white dark:bg-gray-700 items-center h-16">
                   <div className="flex items-center justify-end p-2 mr-4 sm:mr-0 sm:right-auto">
-                    <Grid item xs={4} sx={{px:2}}>
+                    <Grid item xs={4} sx={{ px: 2 }}>
                       <span>Shops Registered: <span className='text-lime-500 font-semibold'>{stateObject.appData.shops.length}</span></span>
                     </Grid>
                     <Grid item xs={4}>
@@ -131,7 +131,8 @@ export default function Dashboard() {
 }
 
 async function getPublisherInfo() {
-  let response = await fetch(`http://localhost:8000/api/publisher/all-info/`, {
+  const { baseUrl } = useContext(ApplicationContext).appData
+  let response = await fetch(`${baseUrl}publisher/all-info/`, {
     method: 'GET',
     headers: {
       'Authorization': `JWT ${localStorage.getItem('access')}`,

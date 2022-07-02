@@ -5,10 +5,11 @@
  * caller-function: 
  * performs-network-request: false
  */
+
 import React from 'react'
 
-export default function About() {
+export default function DefaultImage() {
   return (
-    <div>About</div>
+    <img alt='ecommerce' className='object-cover object-center w-full h-full' src='../assets/images/default.jpg' />
   )
 }

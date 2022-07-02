@@ -1,3 +1,10 @@
+/**
+ * author: akash trivedi
+ * date-created: 
+ * functionality: root of the react app
+ * caller-function: still to find may be node
+ * performs-network-request: false
+ */
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
@@ -16,6 +23,7 @@ import Support from './main/components/Support'
 import Login from './utility/components/Login'
 import Signup from './utility/components/Signup'
 import UserState from './main/state/UserState'
+
 const websiteTitle = 'Vocal to Local'
 
 const customerLoginVariables = {

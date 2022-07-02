@@ -3,6 +3,7 @@
  * date-created: 15-march-2022
  * functionality: render the shops in the dashboard outlet
  * caller-function: ecommerce-frontend\src\publisher\components\Dashboard.js
+ * performs-network-request: false
  */
 import React, { useContext } from 'react'
 import {

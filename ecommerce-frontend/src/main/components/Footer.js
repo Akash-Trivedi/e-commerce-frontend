@@ -3,7 +3,7 @@
  * date-created: 16-feb-2022
  * functionality: render the footer for the main application
  * caller function: ecommerce-frontend/src/App.js
- * stylesheet used: tailwindcss
+ * performs-network-request: false
  */
 
 

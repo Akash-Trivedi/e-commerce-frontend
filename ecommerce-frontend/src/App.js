@@ -3,6 +3,7 @@
  * date-created: 15-feb-2022
  * functionality: render all the components of the webpage, api calls to get the data
  * caller function: ecommerce-frontend/src/index.js
+ * performs-network-request: false
  */
 
 import './App.css';

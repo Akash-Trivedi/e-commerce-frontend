@@ -3,6 +3,7 @@
  * date-created: 10-march-2022
  * functionality: render the registration form for customer
  * caller function: ecommerce-frontend\src\publisher\routes\PublisherPrivateRoutes.js or ecommerce-frontend\src\publisher\routes\CustomerPrivateRoutes.js
+ * performs-network-request: true
  */
 
 import React, { useContext } from 'react';
@@ -12,7 +13,7 @@ import {
 } from '@mui/material';
 import ApplicationContext from '../../main/context/ApplicationContext';
 
-
+const { baseUrl } = useContext(ApplicationContext).appData
 
 export default function Signup(props) {
   let navigate = useNavigate();
@@ -216,7 +217,7 @@ export default function Signup(props) {
 
 function sendOtp(arg1) {
   async function getOtp(contactNumber) {
-    let response = await fetch(`http://127.0.0.1:8000/api/otp/${contactNumber}/`, {
+    let response = await fetch(`${baseUrl}otp/${contactNumber}/`, {
       method: 'GET'
     });
     let otp = await response.json();

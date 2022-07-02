@@ -3,6 +3,7 @@
  * date-created: 17-march-2022
  * functionality: renders new product form
  * caller-function: ecommerce-frontend\src\index.js
+ * performs-network-request: true
  */
 import React from 'react'
 import {
@@ -12,6 +13,8 @@ import {
 import ApplicationContext from '../../main/context/ApplicationContext';
 import { useContext } from 'react';
 import UserContext from '../../main/context/UserContext';
+
+const { baseUrl } = useContext(ApplicationContext).appData
 
 export default function NewProduct() {
   const applicationStateObject = useContext(ApplicationContext)
@@ -218,7 +221,7 @@ export default function NewProduct() {
 async function updateProduct1(data) {
   data.price = parseInt(data.price)
   console.log(data);
-  let response = await fetch(`http://127.0.0.1:8000/api/product/add/`,
+  let response = await fetch(`${baseUrl}product/add/`,
     {
       method: 'POST',
       body: JSON.stringify(data),

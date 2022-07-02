@@ -3,6 +3,7 @@
  * date-created: 21-march-2022
  * functionality: render the page for updating the details of the customer
  * caller-function: ecommerce-frontend\src\main\components\Header.js
+ * performs-network-request: true
  */
 import React, { useContext } from 'react'
 import UserContext from '../../main/context/UserContext'
@@ -13,6 +14,9 @@ import {
   UploadFile
 } from '@mui/icons-material'
 import { grey } from '@mui/material/colors'
+import ApplicationContext from '../../main/context/ApplicationContext'
+
+const { baseUrl } = useContext(ApplicationContext).appData
 
 export default function UpdateProfile(props) {
   const avatarSize = 250;
@@ -176,9 +180,9 @@ async function updateDetails(data, userType) {
   console.log(data)
   let link = ''
   if (parseInt(userType) === 1) {
-    link = 'http://127.0.0.1:8000/api/publisher/profile/update/'
+    link = `${baseUrl}publisher/profile/update/`
   } else {
-    link = 'http://127.0.0.1:8000/api/customer/profile/update/'
+    link = `${baseUrl}customer/profile/update/`
   }
   let response = await fetch(link, {
     method: 'PUT',

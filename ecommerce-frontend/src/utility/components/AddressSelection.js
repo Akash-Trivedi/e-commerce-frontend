@@ -3,6 +3,7 @@
  * date-created: 13-march-2022
  * functionality: custom address selection for dilevery
  * caller-function: ecommerce-frontend\src\index.js
+ * performs-network-request: false
  */
 import { LocalGroceryStoreTwoTone } from '@material-ui/icons';
 import React from 'react'

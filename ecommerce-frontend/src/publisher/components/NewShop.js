@@ -3,14 +3,18 @@
  * date-created: 17-march-2022
  * functionality: render the new shop component
  * caller-function: ecommerce-frontend\src\publisher\components\Shops.js
+ * performs-network-request: true
  */
+
 import React from 'react';
 import {
   Grid, TextField, Box, Button, fullWidth
 } from '@mui/material'
 import { useContext } from 'react';
 import UserContext from '../../main/context/UserContext';
+import ApplicationContext from '../../main/context/ApplicationContext';
 
+const { baseUrl } = useContext(ApplicationContext).appData
 
 export default function NewShop() {
   const stateObject = useContext(UserContext)
@@ -64,7 +68,7 @@ export default function NewShop() {
   function registerShop(event) {
     event.preventDefault();
     async function updateDetails(data) {
-      let response = await fetch(`http://127.0.0.1:8000/api/publisher/shop/add/`, {
+      let response = await fetch(`${baseUrl}publisher/shop/add/`, {
         method: 'POST',
         body: JSON.stringify(data),
         headers: {

@@ -3,6 +3,7 @@
  * date created: 15-feb-2022
  * usage: render the top navigation bar for each page.
  * caller function: ecommerce-frontend/src/App.js
+ * performs-network-request: false
  */
 
 import React, { useContext } from 'react';
@@ -22,6 +23,10 @@ export default function Header() {
     localStorage.setItem('userType', 0);
   }
 
+  function searchProduct(event) {
+
+  }
+
   return (
     <header className='text-white body-font'>
       <nav className='navbar navbar-expand-lg navbar-light bg-black'>
@@ -29,7 +34,7 @@ export default function Header() {
           <NavLink className='navbar-brand text-white p-2' to='/homepage'>V2L</NavLink>
           <NavLink className='navbar-brand text-white' to='/homepage'>Home</NavLink>
           <div className='collapse navbar-collapse' id='navbarSupportedContent'>
-            <form className='inline-flex container-fluid px-24'>
+            <form className='inline-flex container-fluid px-24' onSubmit={searchProduct}>
               <input className='form-control px-5' type='search' placeholder='Search' aria-label='Search' />
               <Button type='submit' color='primary' variant='contained' sx={{ ml: 1 }}>Search</Button>
             </form>

@@ -3,6 +3,7 @@
  * date-created: 16-feb-2022
  * usage: render all the product preview on the homepage
  * caller function: ecommerce-frontend/src/App.js
+ * performs-network-request: false
  */
 
 import React, { useContext } from 'react';
@@ -35,5 +36,5 @@ export default function Homepage() {
     </section>
   );
 }
-{/* <Pagination count={10} shape="rounded" sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} /> */}
+{/* <Pagination count={10} shape="rounded" sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }} /> */ }
 
